@@ -1,14 +1,15 @@
-// Type definitions for babylon v6.16.1
-// Project: https://github.com/babel/babylon
+// Type definitions for babylon 6.16
+// Project: https://github.com/babel/babylon, https://babeljs.io
 // Definitions by: Troy Gerwien <https://github.com/yortus>
+//                 Marvin Hagemeister <https://github.com/marvinhagemeister>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// TypeScript Version: 2.8
 
-/// <reference types="babel-types" />
+import { File, Expression } from 'babel-types';
 
-import * as t from 'babel-types';
-type Node = t.Node;
+export function parse(code: string, opts?: BabylonOptions): File;
 
-export function parse(code: string, opts?: BabylonOptions): Node;
+export function parseExpression(input: string, options?: BabylonOptions): Expression;
 
 export interface BabylonOptions {
     /**
@@ -45,6 +46,7 @@ export type PluginName =
     'estree' |
     'jsx' |
     'flow' |
+    'typescript' |
     'classConstructorCall' |
     'doExpressions' |
     'objectRestSpread' |

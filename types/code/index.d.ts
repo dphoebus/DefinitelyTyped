@@ -16,13 +16,13 @@ export function thrownAt(error?: Error): CodeError;
 /** Configure code. */
 export const settings: Settings;
 
-type AssertionChain<T> = Assertion<T> & Expectation<T>;
+export type AssertionChain<T> = Assertion<T> & Expectation<T>;
 
-type Assertion<T> = Grammar<T> & Flags<T>;
+export type Assertion<T> = Grammar<T> & Flags<T>;
 
-type Expectation<T> = Types<T> & Values<T>;
+export type Expectation<T> = Types<T> & Values<T>;
 
-interface Grammar<T> {
+export interface Grammar<T> {
     /** Connecting word. */
     a: AssertionChain<T>;
     /** Connecting word. */
@@ -41,7 +41,7 @@ interface Grammar<T> {
     to: AssertionChain<T>;
 }
 
-interface Flags<T> {
+export interface Flags<T> {
     /** Inverses the expected result of any assertion */
     not: AssertionChain<T>;
     /**
@@ -66,7 +66,7 @@ interface Flags<T> {
     shallow: AssertionChain<T>;
 }
 
-interface Types<T> {
+export interface Types<T> {
     /** Asserts that the reference value is an arguments object. */
     arguments(): AssertionChain<T>;
     /** Asserts that the reference value is an Array. */
@@ -91,7 +91,7 @@ interface Types<T> {
     object(): AssertionChain<T>;
 }
 
-interface Values<T> {
+export interface Values<T> {
     /** Asserts that the reference value is true. */
     true(): AssertionChain<T>;
     /** Asserts that the reference value is false. */
@@ -125,9 +125,9 @@ interface Values<T> {
     /** Asserts that the reference value has a length property matching the provided size or an object with the specified number of keys. */
     length(size: number): AssertionChain<T>;
     /** Asserts that the reference value equals the provided value. */
-    equal(value: T, options?: any): AssertionChain<T>;
+    equal(value: T | T[], options?: any): AssertionChain<T>;
     /** Asserts that the reference value equals the provided value. */
-    equals(value: T, options?: any): AssertionChain<T>;
+    equals(value: T | T[], options?: any): AssertionChain<T>;
     /** Asserts that the reference value is greater than (>) the provided value. */
     above(value: T): AssertionChain<T>;
     /** Asserts that the reference value is greater than (>) the provided value. */
@@ -160,6 +160,10 @@ interface Values<T> {
     match(regex: RegExp): AssertionChain<T>;
     /** Asserts that the reference value's toString() representation matches the provided regular expression. */
     matches(regex: RegExp): AssertionChain<T>;
+    /** Asserts that the Promise reference value rejects with an exception when called */
+    reject(type?: any, message?: string | RegExp): AssertionChain<T>;
+    /** Asserts that the Promise reference value rejects with an exception when called */
+    rejects(type?: any, message?: string | RegExp): AssertionChain<T>;
     /** Asserts that the reference value satisfies the provided validator function. */
     satisfy(validator: (value: T) => boolean): AssertionChain<T>;
     /** Asserts that the reference value satisfies the provided validator function. */
@@ -170,11 +174,11 @@ interface Values<T> {
     throws(type?: any, message?: string | RegExp): AssertionChain<T>;
 }
 
-interface Settings {
+export interface Settings {
     /**
      * Truncate long assertion error messages for readability?
      * Defaults to true.
-    */
+     */
     truncateMessages?: boolean;
     /**
      * Ignore object prototypes when doing a deep comparison?
@@ -183,7 +187,7 @@ interface Settings {
     comparePrototypes?: boolean;
 }
 
-interface CodeError {
+export interface CodeError {
     filename: string;
     line: string;
     column: string;

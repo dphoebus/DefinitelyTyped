@@ -1,5 +1,5 @@
-import { FusionChartStatic } from "fusioncharts";
+import { FusionChartStatic } from ".";
 
-declare var treemap: (H: FusionChartStatic) => FusionChartStatic;
+declare function treemap(H: FusionChartStatic): FusionChartStatic;
 export = treemap;
 export as namespace treemap;

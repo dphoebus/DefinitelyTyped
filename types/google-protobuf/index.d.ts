@@ -1,6 +1,8 @@
-// Type definitions for google-protobuf 3.2
+// Type definitions for google-protobuf 3.7
 // Project: https://github.com/google/google-protobuf
-// Definitions by: Marcus Longmuir <https://github.com/marcuslongmuir/>
+// Definitions by: Marcus Longmuir <https://github.com/marcuslongmuir>
+//                 Chaitanya Kamatham <https://github.com/kamthamc>
+//                 Austin Bonander <https://github.com/abonander>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 type ByteSource = ArrayBuffer | Uint8Array | number[] | string;
@@ -17,7 +19,7 @@ export abstract class Message {
     data: Message.MessageArray,
     messageId: (string | number),
     suggestedPivot: number,
-    repeatedFields: number[],
+    repeatedFields?: number[],
     oneofFields?: number[][] | null): void;
   static toObjectList<T extends Message>(
     field: T[],
@@ -68,34 +70,34 @@ export abstract class Message {
     oneof: number[],
     value: FieldValue): void;
   static computeOneofCase(msg: Message, oneof: number[]): number;
-  static getWrapperField(
+  static getWrapperField<T extends Message>(
     msg: Message,
-    ctor: typeof Message,
+    ctor: { new(): T },
     fieldNumber: number,
-    required?: number): Message;
-  static getRepeatedWrapperField(
+    required?: number): T;
+  static getRepeatedWrapperField<T extends Message>(
     msg: Message,
-    ctor: typeof Message,
-    fieldNumber: number): Message[];
-  static setWrapperField(
+    ctor: { new(): T },
+    fieldNumber: number): T[];
+  static setWrapperField<T extends Message>(
     msg: Message,
     fieldNumber: number,
-    value?: (Message|Map<any, any>)): void;
+    value?: (T|Map<any, any>)): void;
   static setOneofWrapperField(
     msg: Message,
     fieldNumber: number,
     oneof: number[],
     value: any): void;
-  static setRepeatedWrapperField(
+  static setRepeatedWrapperField<T extends Message>(
     msg: Message,
     fieldNumber: number,
-    value: any): void;
-  static addToRepeatedWrapperField(
+    value?: T[]): void;
+  static addToRepeatedWrapperField<T extends Message>(
     msg: Message,
     fieldNumber: number,
-    value: any,
-    ctor: typeof Message,
-    index: number): any;
+    value: T | undefined,
+    ctor: { new(): T },
+    index?: number): T;
   static toMap(
     field: any[],
     mapKeyGetterFn: (field: any) => string,
@@ -109,8 +111,8 @@ export abstract class Message {
   static equals(m1: Message, m2: Message): boolean;
   static compareExtensions(extension1: {}, extension2: {}): boolean;
   static compareFields(field1: any, field2: any): boolean;
-  cloneMessage(): Message;
-  clone(): Message;
+  cloneMessage(): this;
+  clone(): this;
   static clone<T extends Message>(msg: T): T;
   static cloneMessage<T extends Message>(msg: T): T;
   static copyInto(fromMessage: Message, toMessage: Message): void;

@@ -1,65 +1,194 @@
-// Type definitions for parse5 2.2.0
-// Project: https://github.com/inikulin/parse5
-// Definitions by: Nico Jansen <https://github.com/nicojs>, Meirion Hughes <https://github.com/MeirionHughes>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+import * as parse5 from "parse5";
 
+// Shorthands
+// parse
+const document = parse5.parse("<html>");
 
-import * as parse5 from 'parse5';
+document; // $ExpectType Document
 
-// parse5.SAXParser()
-var parser = new parse5.SAXParser({ locationInfo: true });
+const defaultAdapter = new Object() as parse5.TreeAdapter;
 
-var _wasCalled = false;
+parse5.parse("<html>", {}); // $ExpectType Document
+parse5.parse("<html>", { sourceCodeLocationInfo: true }); // $ExpectType Document
+parse5.parse("<html>", { treeAdapter: defaultAdapter }); // $ExpectType Document
 
-parser.on('startTag', (name, attrs, selfClosing, location) => {
-    console.log(name, attrs, selfClosing, location);
-    console.log(attrs[0].name);
-    console.log(attrs[0].prefix);
-    console.log(attrs[0].value);
+let opt = {
+    sourceCodeLocationInfo: true,
+    scriptingEnabled: false,
+    treeAdapter: defaultAdapter
+};
 
-    if(name == "use")
-        if(attrs[0].prefix === undefined)
-            throw "prefix wasn't defined on known attr"
+parse5.parse("<html>", opt); // $ExpectType Document
 
-    _wasCalled = true;
+opt = {
+    sourceCodeLocationInfo: true,
+    scriptingEnabled: false,
+    treeAdapter: defaultAdapter
+};
+
+parse5.parse("<html>", opt); // $ExpectType Document
+
+// parseFragment
+const fragment = parse5.parseFragment("<div>");
+
+fragment; // $ExpectType DocumentFragment
+
+parse5.parseFragment("<div>", {});
+parse5.parseFragment("<div>", { sourceCodeLocationInfo: true });
+parse5.parseFragment("<div>", { treeAdapter: defaultAdapter });
+parse5.parseFragment("<div>", {
+    sourceCodeLocationInfo: true,
+    treeAdapter: defaultAdapter
+});
+parse5.parseFragment("<div>", {
+    sourceCodeLocationInfo: true,
+    treeAdapter: defaultAdapter
 });
 
-parser.on('text', (text, location)  => {
-    console.log(text, location);
+const element = (parse5.parseFragment(
+    "<div>"
+) as parse5.DefaultTreeDocumentFragment).childNodes[0] as parse5.Element;
+
+parse5.parseFragment(element, "<div>");
+parse5.parseFragment(element, "<div>", {});
+parse5.parseFragment(element, "<div>", { sourceCodeLocationInfo: true });
+parse5.parseFragment(element, "<div>", {
+    treeAdapter: defaultAdapter
+});
+parse5.parseFragment(element, "<div>", {
+    sourceCodeLocationInfo: true,
+    treeAdapter: defaultAdapter
+});
+parse5.parseFragment(element, "<div>", {
+    sourceCodeLocationInfo: true,
+    treeAdapter: defaultAdapter
 });
 
-parser.write('some text');
-parser.write('<svg class="icon"><use xlink:href="icons.svg#some_selector"></use></svg>');
+// serialize
+const html = parse5.serialize(element);
 
-if(!_wasCalled)
-    throw "parser.on 'startTag' wasn't called";
+html; // $ExpectType string
 
-// parse5.parse()
-parse5.parse('<html></html>', { locationInfo: true, treeAdapter: parse5.treeAdapters.default });
-parse5.parse('html', {});
-parse5.parse('');
+parse5.serialize(element, { treeAdapter: defaultAdapter });
+parse5.serialize(element, { treeAdapter: defaultAdapter });
 
-// parse5.ParserStream()
-var parserStream = new parse5.ParserStream({ locationInfo: true, treeAdapter: parse5.treeAdapters.htmlparser2 });
-parserStream = new parse5.ParserStream({ });
-parserStream = new parse5.ParserStream();
+// Location info
+const loc = (element as parse5.DefaultTreeElement).sourceCodeLocation!;
 
-parserStream.write("<html></html>");
+loc.startLine; // $ExpectType number
+loc.startCol; // $ExpectType number
+loc.endLine; // $ExpectType number
+loc.endCol; // $ExpectType number
+loc.startOffset; // $ExpectType number
+loc.endOffset; // $ExpectType number
 
-var node = parserStream.document.childNodes[0];
+loc.startTag.startLine; // $ExpectType number
+loc.startTag.startCol; // $ExpectType number
+loc.startTag.endLine; // $ExpectType number
+loc.startTag.endCol; // $ExpectType number
+loc.startTag.startOffset; // $ExpectType number
+loc.startTag.endOffset; // $ExpectType number
 
-node.parentNode.attrs = [{name: '', value: ''}];
+loc.startTag.attrs["someAttr"].startLine; // $ExpectType number
+loc.startTag.attrs["someAttr"].startCol; // $ExpectType number
+loc.startTag.attrs["someAttr"].endLine; // $ExpectType number
+loc.startTag.attrs["someAttr"].endCol; // $ExpectType number
+loc.startTag.attrs["someAttr"].startOffset; // $ExpectType number
+loc.startTag.attrs["someAttr"].endOffset; // $ExpectType number
 
-// parse5.parseFragment()
-var fragment = parse5.parseFragment('<div></div>');
-fragment = parse5.parseFragment('<div></div>', {locationInfo: true});
+loc.endTag.startLine; // $ExpectType number
+loc.endTag.startCol; // $ExpectType number
+loc.endTag.endLine; // $ExpectType number
+loc.endTag.endCol; // $ExpectType number
+loc.endTag.startOffset; // $ExpectType number
+loc.endTag.endOffset; // $ExpectType number
 
-// parse5.ASTNode
-fragment.quirksMode = true;
-fragment.namespaceURI = '';
-fragment.nodeName = '';
-fragment.tagName = '';
-fragment.value = '';
-fragment.data = '';
-fragment = fragment.childNodes[0];
-fragment = fragment.parentNode;
+// Default AST
+const defaultDocument = document as parse5.DefaultTreeDocument;
+
+defaultDocument.nodeName; // $ExpectType "#document"
+defaultDocument.mode; // $ExpectType DocumentMode
+
+const defaultDoctype = document as parse5.DefaultTreeDocumentType;
+
+defaultDoctype.name; // $ExpectType string
+defaultDoctype.publicId; // $ExpectType string
+defaultDoctype.systemId; // $ExpectType string
+
+const defaultDocumentFragment = fragment as parse5.DefaultTreeDocumentFragment;
+
+defaultDocumentFragment.nodeName; // $ExpectType "#document-fragment"
+
+const defaultElement = defaultDocument
+    .childNodes[0] as parse5.DefaultTreeElement;
+
+defaultElement.sourceCodeLocation!; // $ExpectType ElementLocation
+defaultElement.namespaceURI; // $ExpectType string
+defaultElement.nodeName; // $ExpectType string
+defaultElement.tagName; // $ExpectType string
+defaultElement.parentNode; // $ExpectType DefaultTreeParentNode
+defaultElement.parentNode.nodeName; // $ExpectType string
+
+const defaultAttr = defaultElement.attrs[0];
+
+defaultAttr.name; // $ExpectType string
+defaultAttr.namespace!; // $ExpectType string
+defaultAttr.prefix!; // $ExpectType string
+defaultAttr.value; // $ExpectType string
+
+const defaultTextNode = defaultDocumentFragment
+    .childNodes[0] as parse5.DefaultTreeTextNode;
+
+defaultTextNode.sourceCodeLocation!; // $ExpectType Location
+defaultTextNode.nodeName; // $ExpectType "#text"
+defaultTextNode.value; // $ExpectType string
+defaultTextNode.parentNode; // $ExpectType DefaultTreeParentNode
+defaultTextNode.parentNode.nodeName; // $ExpectType string
+
+const defaultCommentNode = defaultDocumentFragment
+    .childNodes[0] as parse5.DefaultTreeCommentNode;
+
+defaultCommentNode.sourceCodeLocation!; // $ExpectType Location
+defaultCommentNode.nodeName; // $ExpectType "#comment"
+defaultCommentNode.data; // $ExpectType string
+defaultCommentNode.parentNode; // $ExpectType DefaultTreeParentNode
+defaultCommentNode.parentNode.nodeName; // $ExpectType string
+
+const adapter = defaultAdapter;
+
+adapter.createDocument(); // $ExpectType Document
+adapter.createDocumentFragment(); // $ExpectType DocumentFragment
+adapter.createElement("div", "namespace", [{ name: "someAttr", value: "42" }]); // $ExpectType Element
+adapter.createCommentNode("foo"); // $ExpectType CommentNode
+
+adapter.appendChild(document, element);
+adapter.insertBefore(document, element, element);
+adapter.setTemplateContent(element, fragment);
+
+adapter.getTemplateContent(element); // $ExpectType DocumentFragment
+
+adapter.setDocumentType(document, "name", "publicId", "systemId");
+adapter.setDocumentMode(document, "quirks");
+
+adapter.getDocumentMode(document); // $ExpectType DocumentMode
+
+adapter.detachNode(element);
+adapter.insertText(element, "text");
+adapter.insertTextBefore(document, "text", element);
+adapter.adoptAttributes(element, [{ name: "someAttr", value: "42" }]);
+
+adapter.getFirstChild(element); // $ExpectType Node
+adapter.getChildNodes(element)[0]; // $ExpectType Node
+adapter.getParentNode(element); // $ExpectType ParentNode
+adapter.getAttrList(element)[0]; // $ExpectType Attribute
+adapter.getTagName(element); // $ExpectType string
+adapter.getNamespaceURI(element); // $ExpectType string
+adapter.getTextNodeContent(defaultTextNode); // $ExpectType string
+adapter.getCommentNodeContent(defaultCommentNode); // $ExpectType string
+adapter.getDocumentTypeNodeName(defaultDoctype); // $ExpectType string
+adapter.getDocumentTypeNodePublicId(defaultDoctype); // $ExpectType string
+adapter.getDocumentTypeNodeSystemId(defaultDoctype); // $ExpectType string
+adapter.isTextNode(element); // $ExpectType boolean
+adapter.isCommentNode(element); // $ExpectType boolean
+adapter.isDocumentTypeNode(element); // $ExpectType boolean
+adapter.isElementNode(element); // $ExpectType boolean

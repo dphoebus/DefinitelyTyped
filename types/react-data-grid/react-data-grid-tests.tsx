@@ -1,12 +1,60 @@
 import * as React from 'react';
-import * as ReactDataGrid from 'react-data-grid';
-import * as ReactDataGridPlugins from 'react-data-grid/addons';
+import ReactDataGrid = require('react-data-grid');
+import * as ReactDataGridPlugins from 'react-data-grid-addons';
 import faker = require('faker');
 
 var Editors = ReactDataGridPlugins.Editors;
 var Toolbar = ReactDataGridPlugins.Toolbar;
 var AutoCompleteEditor = Editors.AutoComplete;
 var DropDownEditor = Editors.DropDownEditor;
+var { Selectors } = ReactDataGridPlugins.Data;
+
+class CustomFilterHeaderCell extends React.Component<any, any> {
+   state = {
+       filterTerm: ""
+   };
+   handleChange(e: any) {
+       let val = e.target.value;
+       this.setState({filterTerm: val});
+       this.props.onChange({filterTerm: val, column: this.props.column});
+   }
+   render() {
+       return (
+           <div>
+               <input type="text" value={this.state.filterTerm} onChange={(e) => this.handleChange(e)} />
+           </div>
+       );
+   }
+}
+
+class CustomRowSelectorCell extends ReactDataGridPlugins.Editors.CheckboxEditor {
+    render(){
+        return super.render();
+    }
+}
+
+export interface ICustomSelectAllProps {
+    onChange: any;
+    inputRef: any;
+}
+
+class CustomSelectAll extends React.Component<ICustomSelectAllProps> {
+    render() {
+        return (
+            <div className='react-grid-checkbox-container checkbox-align'>
+                <input
+                    className='react-grid-checkbox'
+                    type='checkbox'
+                    name='select-all-checkbox'
+                    id='select-all-checkbox'
+                    ref={this.props.inputRef}
+                    onChange={this.props.onChange}
+                />
+                <label htmlFor='select-all-checkbox' className='react-grid-checkbox-label'></label>
+            </div>
+        );
+    }
+}
 
 faker.locale = 'en_GB';
 
@@ -83,7 +131,7 @@ var counties = [
 
 var titles = ['Dr.', 'Mr.', 'Mrs.', 'Miss', 'Ms.'];
 
-var columns:ReactDataGrid.Column[] = [
+var columns:ReactDataGrid.Column<typeof counties>[] = [
     {
         key: 'id',
         name: 'ID',
@@ -103,7 +151,10 @@ var columns:ReactDataGrid.Column[] = [
         name: 'County',
         editor: <AutoCompleteEditor options={counties}/>,
         width: 200,
-        resizable: true
+        resizable: true,
+        getRowMetaData: (rowdata: any, column: ReactDataGrid.Column<typeof counties>) => {
+            return {};
+        }
     },
     {
         key: 'title',
@@ -178,14 +229,17 @@ var columns:ReactDataGrid.Column[] = [
         name: 'Company Name',
         editable: true,
         width: 200,
-        resizable: true
+        resizable: true,
+        filterable: true,
+        filterRenderer: CustomFilterHeaderCell
     },
     {
         key: 'sentence',
         name: 'Sentence',
         editable: true,
         width: 200,
-        resizable: true
+        resizable: true,
+        cellClass: 'sentence-class'
     }
 ];
 
@@ -198,17 +252,17 @@ class Example extends React.Component<any, any> {
     getColumns() {
         var clonedColumns = columns.slice();
         clonedColumns[2].events = {
-            onClick: function (ev:React.SyntheticEvent<any>, args:{idx:number, rowIdx:number}) {
+            onClick: (ev:React.SyntheticEvent<any>, args:{idx:number, rowIdx:number}) => {
                 var idx = args.idx;
                 var rowIdx = args.rowIdx;
-                this.refs.grid.openCellEditor(rowIdx, idx);
-            }.bind(this)
+                (this.refs.grid as ReactDataGrid<{}>).openCellEditor(rowIdx, idx);
+            }
         };
 
         return clonedColumns;
     }
 
-    handleGridRowsUpdated(updatedRowData:ReactDataGrid.GridRowsUpdatedEvent) {
+    handleGridRowsUpdated(updatedRowData:ReactDataGrid.GridRowsUpdatedEvent<typeof counties>) {
         var rows = this.state.rows;
 
         for (var i = updatedRowData.fromRow; i <= updatedRowData.toRow; i++) {
@@ -218,6 +272,23 @@ class Example extends React.Component<any, any> {
         }
 
         this.setState({rows: rows});
+    }
+
+    onRowExpandToggle = ({ columnGroupName, name, shouldExpand }:ReactDataGrid.OnRowExpandToggle ) => {
+        let expandedRows = Object.assign({}, this.state.expandedRows);
+        expandedRows[columnGroupName] = Object.assign({}, expandedRows[columnGroupName]);
+        expandedRows[columnGroupName][name] = {isExpanded: shouldExpand};
+        this.setState({expandedRows: expandedRows});
+    }
+
+    onRowClick(rowIdx:number, row: Object) {
+        // Do nothing, just test that it accepts an event
+    }
+
+    getRows() {
+        const rows = Selectors.getRows(this.state);
+        console.log(rows);
+        return rows;
     }
 
     handleAddRow(e:any) {
@@ -233,6 +304,7 @@ class Example extends React.Component<any, any> {
     }
 
     getRowAt(index:number) {
+        this.getRows();
         if (index < 0 || index > this.getSize()) {
             return undefined;
         }
@@ -243,12 +315,12 @@ class Example extends React.Component<any, any> {
         return this.state.rows.length;
     }
 
-    onRowsSelected(rows: Array<ReactDataGrid.SelectionParams>) {
+    onRowsSelected(rows: Array<ReactDataGrid.SelectionParams<typeof counties>>) {
         var selectedIndexes = this.state.selectedIndexes as Array<number>;
 
         this.setState({selectedIndexes: selectedIndexes.concat(rows.map(r => r.rowIdx))});
     }
-    onRowsDeselected(rows: Array<ReactDataGrid.SelectionParams>) {
+    onRowsDeselected(rows: Array<ReactDataGrid.SelectionParams<typeof counties>>) {
         var rowIndexes = rows.map(r => r.rowIdx);
         var selectedIndexes = this.state.selectedIndexes as Array<number>;
         this.setState({selectedIndexes: selectedIndexes.filter(i => rowIndexes.indexOf(i) === -1 )});
@@ -260,10 +332,12 @@ class Example extends React.Component<any, any> {
             <ReactDataGrid
                 ref='grid'
                 enableCellSelect={true}
+                enableDragAndDrop={true}
                 columns={this.getColumns()}
                 rowGetter={this.getRowAt}
                 rowsCount={this.getSize()}
                 onGridRowsUpdated={this.handleGridRowsUpdated}
+                onRowExpandToggle={this.onRowExpandToggle}
                 toolbar={<Toolbar onAddRow={this.handleAddRow}/>}
                 enableRowSelect={true}
                 rowHeight={50}
@@ -278,6 +352,9 @@ class Example extends React.Component<any, any> {
                         keys: {rowKey: 'id', values: selectedRows}
                     }
                 }}
+                rowActionsCell={CustomRowSelectorCell}
+                selectAllRenderer={CustomSelectAll}
+                onRowClick={this.onRowClick}
             />
 
         );

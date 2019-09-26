@@ -1,16 +1,25 @@
 import * as React from 'react';
+import { ReactWidgetsCommonDropdownProps, AutoFocus } from './CommonProps';
 
-interface DropdownListProps extends React.Props<DropdownListClass> {
+interface DropdownListProps extends ReactWidgetsCommonDropdownProps<DropdownListClass>, AutoFocus {
+    /**
+     * Allow to create a new option on the data list.
+     */
+    allowCreate?: boolean | 'onFilter';
     /**
      * The current value of the DropdownList. This can be an object (such as a member of the
      * data array) or a primitive value, hinted to by the valueField. The widget value does not
      * need to be in the data array; widgets can have values that are not in their list.
      */
     value?: any;
-      /**
+    /**
      * Default value.
      */
     defaultValue?: any;
+    /**
+     * Create event Handler that is called when a new option is added to the data list.
+     */
+    onCreate?: (value: any) => void;
     /**
      * Change event Handler that is called when the value is changed.
      */
@@ -21,11 +30,28 @@ interface DropdownListProps extends React.Props<DropdownListClass> {
      */
     onSelect?: (value: any) => void;
     /**
+     * The native onKeyDown event, called preventDefault will prevent any custom behavior, included keyboard shortcuts.
+     */
+    onKeyDown?: (event: KeyboardEvent) => void;
+    /**
+     * The native onKeyPress event, called preventDefault will stop any custom behavior.
+     */
+    onKeyPress?: (event: KeyboardEvent) => void;
+    /**
      * Provide an array of possible values for the DropdownList. If an array of objects is
      * provided you should use the valueField and textField props, to specify which object
      * properties comprise the value field (such as an id) and the field used to label the item.
      */
     data?: any[];
+    /**
+     * Delay
+     * @default 250
+     */
+    delay?: number;
+    /**
+     * Change the opening direction of the popup
+     */
+    dropUp?: boolean;
     /**
      * A dataItem field name for uniquely identifying items in the data list. A valueField is
      * required when the value prop is not itself a dataItem. A valueField is useful when
@@ -49,16 +75,7 @@ interface DropdownListProps extends React.Props<DropdownListClass> {
      * This component is used to render each possible item in the DropdownList. The default
      * component renders the text of the selected item (specified by textfield)
      */
-    itemComponent?: React.ReactType;
-    /**
-     * Disable the widget, if an Array of values is passed in only those values will be disabled.
-     */
-    disabled?: boolean | any[];
-    /**
-     * Place the DropdownList in a read-only mode, If an Array of values is passed in only those
-     * values will be read-only.
-     */
-    readOnly?: boolean | any[];
+    itemComponent?: React.ReactType | string;
     /**
      * Determines how to group the DropdownList. Providing a string will group the data array by
      * that property. You can also provide a function which should return the group value.
@@ -87,7 +104,7 @@ interface DropdownListProps extends React.Props<DropdownListClass> {
     onSearch?: (searchTerm: string) => void;
     /**
      * Whether or not the DropdownList is open. When unset (undefined) the DropdownList will
-     * handle the opening and closing internally. 
+     * handle the opening and closing internally.
      */
     open?: boolean;
     /**
@@ -105,9 +122,8 @@ interface DropdownListProps extends React.Props<DropdownListClass> {
      * There are a few built-in filtering methods that can be specified by passing the String name.
      * To handle custom filtering techniques provide a function that returns true or false
      * for each passed in item (analogous to the array.filter builtin)
-     * @enum false "startsWith" "endsWith" "contains"
      */
-    filter?: boolean | "startsWith" | "endsWith" | "contains" | ((dataItem: any, str: string) => boolean);
+    filter?: false | "startsWith" | "endsWith" | "contains" | ((dataItem: any, str: string) => boolean);
     /**
      * Use in conjunction with the filter prop. Filter the list without regard for case. This
      * only applies to non function values for filter
@@ -132,16 +148,29 @@ interface DropdownListProps extends React.Props<DropdownListClass> {
      */
     duration?: number;
     /**
-     * Mark whether the widget should render right-to-left. This property can also be implicitly
-     * passed to the widget through a childContext prop (isRtl) this allows higher level
-     * application components to specify the direction.
-     */
-    isRtl?: boolean;
-    /**
      * Object hash containing display text and/or text for screen readers. Use the messages
      * object to localize widget text and increase accessibility.
      */
     messages?: DropdownListMessages;
+    listComponent?: React.ReactType | string;
+    /**
+     * An object of props that is passed directly to the underlying List component.
+     */
+    listProps?: object;
+    /**
+     * The HTML name attribute used to group checkboxes and radio buttons together.
+     */
+    name?: string;
+    /**
+     * Whether or not the SelectList allows multiple selection or not.
+     * when false the SelectList will render as a list of radio buttons, and checkboxes when true.
+     */
+    multiple?: boolean;
+
+    /**
+     * Adds a css class to the input container element.
+     */
+    containerClassName?: string;
 }
 
 interface DropdownListMessages {
@@ -164,9 +193,14 @@ interface DropdownListMessages {
      * @default: "The filter returned no results"
      */
     emptyFilter?: string | ((props: DropdownListProps) => string);
+    /**
+     * Text to display for the create option
+     * @default: "Create option {text}"
+     */
+    createOption?: string | ((props: DropdownListProps) => string);
 }
 
-interface DropdownList extends React.ReactElement<DropdownListProps> {}
-interface DropdownListClass extends React.ComponentClass<DropdownListProps> {}
+interface DropdownList extends React.ReactElement<DropdownListProps> { }
+interface DropdownListClass extends React.ComponentClass<DropdownListProps> { }
 declare var DropdownList: DropdownListClass;
 export = DropdownList;

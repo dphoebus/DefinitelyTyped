@@ -1,364 +1,506 @@
-// Type definitions for react-dates v7.0.1
+// Type definitions for react-dates v17.1.0
 // Project: https://github.com/airbnb/react-dates
-// Definitions by: Artur Ampilogov <https://github.com/Artur-A>
+// Definitions by: Artur Ampilogov <https://github.com/ArturAmpilogov>
+//                 Nathan Holland <https://github.com/NathanNZ>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.1
+// TypeScript Version: 2.8
+// Required fields are made according to 'minimum REQUIRED setup' in https://github.com/airbnb/react-dates/blob/master/README.md
 
-import * as React from "react";
-import * as moment from "moment";
+import * as React from 'react';
+import * as moment from 'moment';
 
 export = ReactDates;
 
-declare namespace momentPropTypes{
-    type momentObj = any;
+declare namespace momentPropTypes {
+    type momentObj = moment.Moment;
     type momentString = any;
     type momentDurationObj = any;
 }
 
-    
-declare namespace ReactDates{
+declare namespace ReactDates {
+    // SHAPES
+    //
+    // shapes/AnchorDirectionShape.js
     type AnchorDirectionShape = 'left' | 'right';
-    type FocusedInputShape = 'startDate' | 'endDate' | null;
-    type OrientationShape = 'horizontal' | 'vertical';        
-    type ScrollableOrientationShape = 'horizontal' | 'vertical' | 'verticalScrollable'; 
-    
 
-    interface DateRangePickerShape{
-        startDate?: momentPropTypes.momentObj,
-        endDate?: momentPropTypes.momentObj,
-        focusedInput?: FocusedInputShape,
-        screenReaderInputMessage?: string,
-        minimumNights?: number,
-        isDayBlocked?: (day: any) => boolean,
-        isOutsideRange?: (day: any) => boolean,
-        enableOutsideDays?: boolean,
-        reopenPickerOnClearDates?: boolean,
-        keepOpenOnDateSelect?: boolean,
-        numberOfMonths?: number,
-        showClearDates?: boolean,
-        disabled?: boolean,
-        required?: boolean,
-        showDefaultInputIcon?: boolean,
+    // shapes/CalendarInfoPositionShape.js
+    type CalendarInfoPositionShape = 'top' | 'bottom' | 'before' | 'after';
 
-        orientation?: OrientationShape,
-        anchorDirection?: AnchorDirectionShape,
-        horizontalMargin?: number,
-        // portal options
-        withPortal?: boolean,
-        withFullScreenPortal?: boolean,
+    // shapes/DateRangePickerShape.js
+    interface DateRangePickerShape {
+        // required props for a functional interactive DateRangePicker
+        startDate: momentPropTypes.momentObj | null;
+        startDateId: string;
+        endDate: momentPropTypes.momentObj | null;
+        endDateId: string;
+        focusedInput: FocusedInputShape | null;
 
-        startDateId?: string,
-        startDatePlaceholderText?: string,
-        endDateId?: string,
-        endDatePlaceholderText?: string,
+        onDatesChange: (
+            arg: {
+                startDate: momentPropTypes.momentObj | null;
+                endDate: momentPropTypes.momentObj | null;
+            }
+        ) => void;
+        onFocusChange: (arg: FocusedInputShape | null) => void;
 
-        initialVisibleMonth?: () => moment.Moment,
-        onDatesChange?: (arg: { startDate: any, endDate: any }) => void,
-        onFocusChange?: (arg: FocusedInputShape) => void,
-        onPrevMonthClick?: (e: React.EventHandler<React.MouseEvent<HTMLSpanElement>>) => void,
-        onNextMonthClick?: (e: React.EventHandler<React.MouseEvent<HTMLSpanElement>>) => void,
+        onClose?: (
+            final: {
+                startDate: momentPropTypes.momentObj;
+                endDate: momentPropTypes.momentObj;
+            }
+        ) => void;
 
-        renderDay?: (day: any) => (string | JSX.Element),
+        // input related props
+        startDatePlaceholderText?: string;
+        endDatePlaceholderText?: string;
+        disabled?: DisabledShape;
+        required?: boolean;
+        readOnly?: boolean;
+        screenReaderInputMessage?: string;
+        showClearDates?: boolean;
+        showDefaultInputIcon?: boolean;
+        inputIconPosition?: IconPositionShape;
+        customInputIcon?: string | JSX.Element;
+        customArrowIcon?: string | JSX.Element;
+        customCloseIcon?: string | JSX.Element;
+        noBorder?: boolean;
+        block?: boolean;
+        small?: boolean;
+        regular?: boolean;
+        keepFocusOnInput?: boolean;
+        // calendar presentation and interaction related props
+        renderMonthText?: (day: momentPropTypes.momentObj) => string | JSX.Element;
+        renderMonthElement?: (
+            props: {
+                month: momentPropTypes.momentObj;
+                onMonthSelect: (currentMonth: momentPropTypes.momentObj, newMonthVal: string) => void;
+                onYearSelect: (currentMonth: momentPropTypes.momentObj, newYearVal: string) => void;
+            }
+        ) => string | JSX.Element;
+        orientation?: OrientationShape;
+        anchorDirection?: AnchorDirectionShape;
+        openDirection?: OpenDirectionShape;
+        horizontalMargin?: number;
+        withPortal?: boolean;
+        withFullScreenPortal?: boolean;
+        appendToBody?: boolean;
+        disableScroll?: boolean;
+        daySize?: number;
+        isRTL?: boolean;
+        firstDayOfWeek?: DayOfWeekShape;
+        initialVisibleMonth?: () => momentPropTypes.momentObj;
+        numberOfMonths?: number;
+        keepOpenOnDateSelect?: boolean;
+        reopenPickerOnClearDates?: boolean;
+        renderCalendarInfo?: () => string | JSX.Element;
+        calendarInfoPosition?: CalendarInfoPositionShape;
+        hideKeyboardShortcutsPanel?: boolean;
+        verticalHeight?: number;
+        transitionDuration?: number;
+        verticalSpacing?: number;
 
-        // i18n
-        displayFormat?: (string | (()=> string)),
-        monthFormat?: string,
-        phrases?: {
-            closeDatePicker: string | JSX.Element,
-            clearDates: string | JSX.Element,
-        }
+        // navigation related props
+        navPrev?: string | JSX.Element;
+        navNext?: string | JSX.Element;
+        onPrevMonthClick?: (newCurrentMonth: momentPropTypes.momentObj) => void;
+        onNextMonthClick?: (newCurrentMonth: momentPropTypes.momentObj) => void;
+
+        // day presentation and interaction related props
+        renderCalendarDay?: (day: momentPropTypes.momentObj) => string | JSX.Element;
+        renderDayContents?: (day: momentPropTypes.momentObj) => string | JSX.Element;
+        minimumNights?: number;
+        enableOutsideDays?: boolean;
+        isDayBlocked?: (day: any) => boolean;
+        isOutsideRange?: (day: any) => boolean;
+        isDayHighlighted?: (day: any) => boolean;
+
+        // internationalization props
+        displayFormat?: string | (() => string);
+        monthFormat?: string;
+        weekDayFormat?: string;
+        phrases?: DateRangePickerPhrases;
+        dayAriaLabelFormat?: string;
     }
+
+    // shapes/DayOfWeekShape.js
+    type DayOfWeekShape = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
+    // shapes/DisabledShape.js
+    type DisabledShape = boolean | 'startDate' | 'endDate';
+
+    // shapes/FocusedInputShape.js
+    type FocusedInputShape = 'startDate' | 'endDate';
+
+    // shape/IconPositionShape.js
+    type IconPositionShape = 'before' | 'after';
+
+    // type/OpenDirectionShape.js
+    type OpenDirectionShape = 'down' | 'up';
+
+    // shpae/OrientationShape.js
+    type OrientationShape = 'horizontal' | 'vertical';
+
+    // shape/ScrollableOrientationShape.js
+    type ScrollableOrientationShape = 'horizontal' | 'vertical' | 'verticalScrollable';
+
+    // shapes/SingleDatePickerShape.js
+    interface SingleDatePickerShape {
+        id: string;
+
+        // required props for a functional interactive SingleDatePicker
+        date: momentPropTypes.momentObj | null;
+        focused: boolean;
+
+        onDateChange: (date: momentPropTypes.momentObj | null) => void;
+        onFocusChange: (arg: { focused: boolean | null }) => void;
+
+        // input related props
+        placeholder?: string;
+        disabled?: boolean;
+        required?: boolean;
+        readOnly?: boolean;
+        screenReaderInputMessage?: string;
+        showClearDate?: boolean;
+        customCloseIcon?: string | JSX.Element;
+        showDefaultInputIcon?: boolean;
+        inputIconPosition?: IconPositionShape;
+        customInputIcon?: string | JSX.Element;
+        noBorder?: boolean;
+        block?: boolean;
+        small?: boolean;
+        regular?: boolean;
+        verticalSpacing?: number;
+        keepFocusOnInput?: boolean;
+
+        // calendar presentation and interaction related props
+        renderMonthText?: (day: momentPropTypes.momentObj) => string | JSX.Element;
+        renderMonthElement?: (
+            props: {
+                month: momentPropTypes.momentObj;
+                onMonthSelect: (currentMonth: momentPropTypes.momentObj, newMonthVal: string) => void;
+                onYearSelect: (currentMonth: momentPropTypes.momentObj, newYearVal: string) => void;
+            }
+        ) => string | JSX.Element;
+        orientation?: OrientationShape;
+        anchorDirection?: AnchorDirectionShape;
+        openDirection?: OpenDirectionShape;
+        horizontalMargin?: number;
+        withPortal?: boolean;
+        withFullScreenPortal?: boolean;
+        appendToBody?: boolean;
+        disableScroll?: boolean;
+        initialVisibleMonth?: () => momentPropTypes.momentObj;
+        firstDayOfWeek?: DayOfWeekShape;
+        numberOfMonths?: number;
+        keepOpenOnDateSelect?: boolean;
+        reopenPickerOnClearDates?: boolean;
+        renderCalendarInfo?: () => string | JSX.Element;
+        calendarInfoPosition?: CalendarInfoPositionShape;
+        hideKeyboardShortcutsPanel?: boolean;
+        daySize?: number;
+        isRTL?: boolean;
+        verticalHeight?: number | null;
+        transitionDuration?: number;
+
+        // navigation related props
+        navPrev?: string | JSX.Element;
+        navNext?: string | JSX.Element;
+        onPrevMonthClick?: (newCurrentMonth: momentPropTypes.momentObj) => void;
+        onNextMonthClick?: (newCurrentMonth: momentPropTypes.momentObj) => void;
+        onClose?: (
+            final: {
+                startDate: momentPropTypes.momentObj;
+                endDate: momentPropTypes.momentObj;
+            }
+        ) => void;
+
+        // day presentation and interaction related props
+        renderCalendarDay?: (day: momentPropTypes.momentObj) => string | JSX.Element;
+        renderDayContents?: (day: momentPropTypes.momentObj) => string | JSX.Element;
+        enableOutsideDays?: boolean;
+        isDayBlocked?: (day: any) => boolean;
+        isOutsideRange?: (day: any) => boolean;
+        isDayHighlighted?: (day: any) => boolean;
+
+        // internationalization props
+        displayFormat?: string | (() => string);
+        monthFormat?: string;
+        weekDayFormat?: string;
+        phrases?: SingleDatePickerPhrases;
+        dayAriaLabelFormat?: string;
+    }
+
+    // PHRASES
+    //
+    // defaultPhrases.js
+    type DateRangePickerPhrases = {
+        calendarLabel?: string;
+        closeDatePicker?: string;
+        clearDates?: string;
+        focusStartDate?: string;
+        jumpToPrevMonth?: string;
+        jumpToNextMonth?: string;
+        keyboardShortcuts?: string;
+        showKeyboardShortcutsPanel?: string;
+        hideKeyboardShortcutsPanel?: string;
+        openThisPanel?: string;
+        enterKey?: string;
+        leftArrowRightArrow?: string;
+        upArrowDownArrow?: string;
+        pageUpPageDown?: string;
+        homeEnd?: string;
+        escape?: string;
+        questionMark?: string;
+        selectFocusedDate?: string;
+        moveFocusByOneDay?: string;
+        moveFocusByOneWeek?: string;
+        moveFocusByOneMonth?: string;
+        moveFocustoStartAndEndOfWeek?: string;
+        returnFocusToInput?: string;
+        keyboardNavigationInstructions?: string;
+        chooseAvailableStartDate?: (date: string) => string;
+        chooseAvailableEndDate?: (date: string) => string;
+        dateIsUnavailable?: (date: string) => string;
+        dateIsSelected?: (date: string) => string;
+    };
+
+    // defaultPhrases.js
+    type DateRangePickerInputPhrases = {
+        focusStartDate?: string;
+        clearDates?: string;
+        keyboardNavigationInstructions?: string;
+    };
+
+    // defaultPhrases.js
+    type SingleDatePickerPhrases = {
+        calendarLabel?: string;
+        closeDatePicker?: string;
+        clearDate?: string;
+        jumpToPrevMonth?: string;
+        jumpToNextMonth?: string;
+        keyboardShortcuts?: string;
+        showKeyboardShortcutsPanel?: string;
+        hideKeyboardShortcutsPanel?: string;
+        openThisPanel?: string;
+        enterKey?: string;
+        leftArrowRightArrow?: string;
+        upArrowDownArrow?: string;
+        pageUpPageDown?: string;
+        homeEnd?: string;
+        escape?: string;
+        questionMark?: string;
+        selectFocusedDate?: string;
+        moveFocusByOneDay?: string;
+        moveFocusByOneWeek?: string;
+        moveFocusByOneMonth?: string;
+        moveFocustoStartAndEndOfWeek?: string;
+        returnFocusToInput?: string;
+        keyboardNavigationInstructions?: string;
+        chooseAvailableDate?: (date: string) => string;
+        dateIsUnavailable?: (date: string) => string;
+        dateIsSelected?: (date: string) => string;
+    };
+
+    // defaultPhrases.js
+    type SingleDatePickerInputPhrases = {
+        clearDate?: string;
+        keyboardNavigationInstructions?: string;
+    };
+
+    // defaultPhrases.js
+    type DayPickerPhrases = {
+        calendarLabel?: string;
+        jumpToPrevMonth?: string;
+        jumpToNextMonth?: string;
+        keyboardShortcuts?: string;
+        showKeyboardShortcutsPanel?: string;
+        hideKeyboardShortcutsPanel?: string;
+        openThisPanel?: string;
+        enterKey?: string;
+        leftArrowRightArrow?: string;
+        upArrowDownArrow?: string;
+        pageUpPageDown?: string;
+        homeEnd?: string;
+        escape?: string;
+        questionMark?: string;
+        selectFocusedDate?: string;
+        moveFocusByOneDay?: string;
+        moveFocusByOneWeek?: string;
+        moveFocusByOneMonth?: string;
+        moveFocustoStartAndEndOfWeek?: string;
+        returnFocusToInput?: string;
+        chooseAvailableStartDate?: (date: string) => string;
+        chooseAvailableEndDate?: (date: string) => string;
+        chooseAvailableDate?: (date: string) => string;
+        dateIsUnavailable?: (date: string) => string;
+        dateIsSelected?: (date: string) => string;
+    };
+
+    // defaultPhrases.js
+    type DayPickerKeyboardShortcutsPhrases = {
+        keyboardShortcuts?: string;
+        showKeyboardShortcutsPanel?: string;
+        hideKeyboardShortcutsPanel?: string;
+        openThisPanel?: string;
+        enterKey?: string;
+        leftArrowRightArrow?: string;
+        upArrowDownArrow?: string;
+        pageUpPageDown?: string;
+        homeEnd?: string;
+        escape?: string;
+        questionMark?: string;
+        selectFocusedDate?: string;
+        moveFocusByOneDay?: string;
+        moveFocusByOneWeek?: string;
+        moveFocusByOneMonth?: string;
+        moveFocustoStartAndEndOfWeek?: string;
+        returnFocusToInput?: string;
+    };
+
+    // defaultPhrases.js
+    type DayPickerNavigationPhrases = {
+        jumpToPrevMonth?: string;
+        jumpToNextMonth?: string;
+    };
+
+    // defaultPhrases.js
+    type CalendarDayPhrases = {
+        chooseAvailableDate: (date: string) => string;
+        dateIsUnavailable: (date: string) => string;
+        dateIsSelected: (date: string) => string;
+    };
+
+    // COMPONENTS
+    //
+    // components/DateRangePicker.js
 
     type DateRangePicker = React.ClassicComponentClass<DateRangePickerShape>;
     var DateRangePicker: React.ClassicComponentClass<DateRangePickerShape>;
 
-    interface SingleDatePickerShape{
-        id: string,
-        placeholder?: string,
-        date?: momentPropTypes.momentObj,
-        focused?: boolean,
-        showClearDate?: boolean,
-        reopenPickerOnClearDates?: boolean,
-        keepOpenOnDateSelect?: boolean,
-        disabled?: boolean,
-        required?: boolean,
-        screenReaderInputMessage?: string,
+    // components/DayPickerRangeController.jsx
+    interface DayPickerRangeControllerShape extends DayPickerShape {
+        // REQUIRED props
+        startDate: momentPropTypes.momentObj | null;
+        endDate: momentPropTypes.momentObj | null;
+        onDatesChange: (
+            arg: {
+                startDate: momentPropTypes.momentObj | null;
+                endDate: momentPropTypes.momentObj | null;
+            }
+        ) => void;
+        focusedInput: FocusedInputShape;
+        onFocusChange: (arg: FocusedInputShape | null) => void;
 
-        onDateChange?: (date: any) => void,
-        onFocusChange?: (arg: { focused: boolean | null }) => void,
+        startDateOffset?: (day: any) => any;
+        endDateOffset?: (day: any) => any;
 
-        isDayBlocked?: (day: any) => boolean,
-        isOutsideRange?: (day: any) => boolean,
-        enableOutsideDays?: boolean,
-        numberOfMonths?: number,
-        orientation?: OrientationShape,
-        initialVisibleMonth?: () => moment.Moment,
-        anchorDirection?: AnchorDirectionShape,
-        horizontalMargin?: number,
+        onClose?: (
+            final: {
+                startDate: momentPropTypes.momentObj;
+                endDate: momentPropTypes.momentObj;
+            }
+        ) => void;
 
-        navPrev?: string | JSX.Element,
-        navNext?: string | JSX.Element,
+        keepOpenOnDateSelect?: boolean;
+        minimumNights?: number;
+        disabled?: DisabledShape;
+        isOutsideRange?: (day: any) => boolean;
+        isDayBlocked?: (day: any) => boolean;
+        isDayHighlighted?: (day: any) => boolean;
+    }
 
-        // portal options
-        withPortal?: boolean,
-        withFullScreenPortal?: boolean,
+    type DayPickerRangeController = React.ClassicComponentClass<DayPickerRangeControllerShape>;
+    var DayPickerRangeController: React.ClassicComponentClass<DayPickerRangeControllerShape>;
 
-        onPrevMonthClick?: (e: React.EventHandler<React.MouseEvent<HTMLSpanElement>>) => void,
-        onNextMonthClick?: (e: React.EventHandler<React.MouseEvent<HTMLSpanElement>>) => void,
+    // components/DayPickerShape.jsx
+    interface DayPickerShape {
+        renderMonthText?: (day: momentPropTypes.momentObj) => string | JSX.Element;
+        renderMonthElement?: (
+            props: {
+                month: momentPropTypes.momentObj;
+                onMonthSelect: (currentMonth: momentPropTypes.momentObj, newMonthVal: string) => void;
+                onYearSelect: (currentMonth: momentPropTypes.momentObj, newYearVal: string) => void;
+            }
+        ) => string | JSX.Element;
+        enableOutsideDays?: boolean;
+        numberOfMonths?: number;
+        orientation?: ScrollableOrientationShape;
+        withPortal?: boolean;
+        initialVisibleMonth?: () => momentPropTypes.momentObj;
+        firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+        hideKeyboardShortcutsPanel?: boolean;
+        daySize?: number;
+        verticalHeight?: number;
+        noBorder?: boolean;
+        transitionDuration?: number;
 
-        renderDay?: (day: any) => (string | JSX.Element),
+        navPrev?: string | JSX.Element;
+        navNext?: string | JSX.Element;
+
+        onPrevMonthClick?: (newCurrentMonth: momentPropTypes.momentObj) => void;
+        onNextMonthClick?: (newCurrentMonth: momentPropTypes.momentObj) => void;
+        onOutsideClick?: (e: any) => void;
+        renderCalendarDay?: (day: momentPropTypes.momentObj) => string | JSX.Element;
+        renderDayContents?: (day: momentPropTypes.momentObj) => string | JSX.Element;
+        renderCalendarInfo?: () => string | JSX.Element;
+        calendarInfoPosition?: CalendarInfoPositionShape;
+
+        // accessibility
+        onBlur?: () => void;
+        isFocused?: boolean;
+        showKeyboardShortcuts?: boolean;
 
         // i18n
-        displayFormat?: (string | (()=> string)),
-        monthFormat?: string,
-        phrases?: {
-            closeDatePicker: string | JSX.Element,
-        },
+        monthFormat?: string;
+        weekDayFormat?: string;
+        phrases?: SingleDatePickerPhrases;
+        dayAriaLabelFormat?: string;
+
+        isRTL?: boolean;
     }
+
+    // components/DayPickerSingleDateController.jsx
+    interface DayPickerSingleDateControllerShape extends DayPickerShape {
+        date: momentPropTypes.momentObj | null;
+        onDateChange: (date: momentPropTypes.momentObj | null) => void;
+        focused: boolean;
+        onFocusChange: (arg: { focused: boolean | null }) => void;
+
+        onClose?: (final: { date: momentPropTypes.momentObj }) => void;
+
+        keepOpenOnDateSelect?: boolean;
+        isOutsideRange?: (day: any) => boolean;
+        isDayBlocked?: (day: any) => boolean;
+        isDayHighlighted?: (day: any) => boolean;
+    }
+
+    type DayPickerSingleDateController = React.ClassicComponentClass<DayPickerSingleDateControllerShape>;
+    var DayPickerSingleDateController: React.ClassicComponentClass<DayPickerSingleDateControllerShape>;
+
+    // components/SingleDatePicker.js
     type SingleDatePicker = React.ClassicComponentClass<SingleDatePickerShape>;
     var SingleDatePicker: React.ClassicComponentClass<SingleDatePickerShape>;
 
-
-
-    interface DateRangePickerInputControllerShape {
-        startDate?: momentPropTypes.momentObj,
-        startDateId?: string,
-        startDatePlaceholderText?: string,
-        isStartDateFocused?: boolean,
-
-        endDate?: momentPropTypes.momentObj,
-        endDateId?: string,
-        endDatePlaceholderText?: string,
-        isEndDateFocused?: boolean,
-
-        screenReaderMessage?: string,
-        showClearDates?: boolean,
-        showCaret?: boolean,
-        showDefaultInputIcon?: boolean,
-        disabled?: boolean,
-        required?: boolean,
-
-        keepOpenOnDateSelect?: boolean,
-        reopenPickerOnClearDates?: boolean,
-        withFullScreenPortal?: boolean,
-        isOutsideRange?: (day: any) => boolean,        
-        displayFormat?: (string | (()=> string)),
-
-        onFocusChange?: (arg: FocusedInputShape) => void,
-        onDatesChange?: (arg: { startDate: any, endDate: any }) => void,
-
-        customInputIcon?: string | JSX.Element,
-        customArrowIcon?: string | JSX.Element,
-
-        // i18n
-        phrases?: {
-            clearDates: string | JSX.Element,
-        }
-    }
-    type DateRangePickerInputController = React.ClassicComponentClass<DateRangePickerInputControllerShape>;
-    var DateRangePickerInputController: React.ClassicComponentClass<DateRangePickerInputControllerShape>;
-    
-
-
-    interface DateRangePickerInputShape{
-        startDateId?: string,
-        startDatePlaceholderText?: string,
-        screenReaderMessage?: string,
-
-        endDateId?: string,
-        endDatePlaceholderText?: string,
-
-        onStartDateFocus?: (e: React.EventHandler<React.MouseEvent<HTMLSpanElement>>) => void,
-        onEndDateFocus?: (e: React.EventHandler<React.FocusEvent<HTMLInputElement>>) => void,        
-        onStartDateChange?: (e: React.EventHandler<React.FormEvent<HTMLInputElement>>) => void,
-        onEndDateChange?: (e: React.EventHandler<React.FormEvent<HTMLInputElement>>) => void,
-        onStartDateShiftTab?: (e: React.EventHandler<React.KeyboardEvent<HTMLInputElement>>) => void,
-        onEndDateTab?: (e: React.EventHandler<React.KeyboardEvent<HTMLInputElement>>) => void,
-        onClearDates?: (e: React.EventHandler<React.MouseEvent<HTMLButtonElement>>) => void,
-
-        startDate?: string,
-        startDateValue?: string,
-        endDate?: string,
-        endDateValue?: string,
-
-        isStartDateFocused?: boolean,
-        isEndDateFocused?: boolean,
-        showClearDates?: boolean,
-        disabled?: boolean,
-        required?: boolean,
-        showCaret?: boolean,
-        showDefaultInputIcon?: boolean,
-        customInputIcon?: string | JSX.Element,
-        customArrowIcon?: string | JSX.Element,
-
-        // i18n
-        phrases?:{
-            clearDates: string | JSX.Element,
-        },
-    }
-    type DateRangePickerInput = React.ClassicComponentClass<DateRangePickerInputShape>;
-    var DateRangePickerInput: React.ClassicComponentClass<DateRangePickerInputShape>;
-
-
-
-    interface SingleDatePickerInputShape{
-        id: string,
-        placeholder?: string, // also used as label
-        displayValue?: string,
-        inputValue?: string,
-        screenReaderMessage?: string,
-        focused?: boolean,
-        disabled?: boolean,
-        required?: boolean,
-        showCaret?: boolean,
-        showClearDate?: boolean,
-
-        onChange?: (e: React.EventHandler<React.FormEvent<HTMLInputElement>>) => void,
-        onClearDate?: (e: React.EventHandler<React.MouseEvent<HTMLButtonElement>>) => void,
-        onFocus?: (e: React.EventHandler<React.FocusEvent<HTMLInputElement>>) => void,
-        onKeyDownShiftTab?: (e: React.EventHandler<React.KeyboardEvent<HTMLInputElement>>) => void,
-        onKeyDownTab?: (e: React.EventHandler<React.KeyboardEvent<HTMLInputElement>>) => void,
-
-        // i18n
-        phrases?: {
-            clearDate: string | JSX.Element,
-        }
-    }
-    type SingleDatePickerInput = React.ClassicComponentClass<SingleDatePickerInputShape>;
-    var SingleDatePickerInput: React.ClassicComponentClass<SingleDatePickerInputShape>;
-
-
-
-
-    interface DayPickerShape{
-        enableOutsideDays?: boolean,
-        numberOfMonths?: number,
-        modifiers?: any,
-        orientation?: ScrollableOrientationShape,
-        withPortal?: boolean,
-        hidden?: boolean,
-        initialVisibleMonth?: () => moment.Moment,
-
-        navPrev?: string | JSX.Element,
-        navNext?: string | JSX.Element,
-
-        onDayClick?: (day: any, e: React.EventHandler<React.MouseEvent<HTMLTableDataCellElement>>) => void,
-        onDayMouseEnter?: (day: any, e: React.EventHandler<React.MouseEvent<HTMLTableDataCellElement>>) => void,
-        onDayMouseLeave?: (day: any, e: React.EventHandler<React.MouseEvent<HTMLTableDataCellElement>>) => void,
-        onPrevMonthClick?: (e: React.EventHandler<React.MouseEvent<HTMLSpanElement>>) => void,
-        onNextMonthClick?: (e: React.EventHandler<React.MouseEvent<HTMLSpanElement>>) => void,
-        onOutsideClick?: (e: MouseEvent) => void,
-
-        renderDay?: (day: any) => (string | JSX.Element),
-
-        // i18n
-        monthFormat?: string,
-    }   
-    type DayPicker = React.ClassicComponentClass<DayPickerShape>;
-    var DayPicker: React.ClassicComponentClass<DayPickerShape>;
-    
-
-
-    interface DayPickerRangeControllerShape{
-        startDate?: momentPropTypes.momentObj,
-        endDate?: momentPropTypes.momentObj,
-        onDatesChange?: (arg: { startDate: any, endDate: any }) => void,
-
-        focusedInput?: FocusedInputShape,
-        onFocusChange?: (arg: FocusedInputShape) => void,
-
-        keepOpenOnDateSelect?: boolean,
-        minimumNights?: number,
-        isOutsideRange?: (day: any) => boolean,
-        isDayBlocked?: (day: any) => boolean,
-        isDayHighlighted?: (day: any) => boolean,
-
-        // DayPicker props
-        enableOutsideDays?: boolean,
-        numberOfMonths?: number,
-        orientation?: ScrollableOrientationShape,
-        withPortal?: boolean,
-        hidden?: boolean,
-        initialVisibleMonth?: () => moment.Moment,
-
-        navPrev?: string | JSX.Element,
-        navNext?: string | JSX.Element,
-
-        onPrevMonthClick?: (e: React.EventHandler<React.MouseEvent<HTMLSpanElement>>) => void,
-        onNextMonthClick?: (e: React.EventHandler<React.MouseEvent<HTMLSpanElement>>) => void,
-        onOutsideClick?: (e: MouseEvent) => void,
-        renderDay?: (day: any) => (string | JSX.Element),
-
-        // i18n
-        monthFormat?: string,
-    }
-    type DayPickerRangeController = React.ClassicComponentClass<DayPickerRangeControllerShape>;
-    var DayPickerRangeController: React.ClassicComponentClass<DayPickerRangeControllerShape>;
-    
-
-    interface CalendarMonthGridShape{
-        enableOutsideDays?: boolean,
-        firstVisibleMonthIndex?: number,
-        initialMonth?: momentPropTypes.momentObj,
-        isAnimating?: boolean,
-        numberOfMonths?: number,
-        modifiers?: any,
-        orientation?: ScrollableOrientationShape,
-        onDayClick?: (day: any, e: React.EventHandler<React.MouseEvent<HTMLTableDataCellElement>>) => void,
-        onDayMouseEnter?: (day: any, e: React.EventHandler<React.MouseEvent<HTMLTableDataCellElement>>) => void,
-        onDayMouseLeave?: (day: any, e: React.EventHandler<React.MouseEvent<HTMLTableDataCellElement>>) => void,
-        onMonthTransitionEnd?: ()=> void,
-        renderDay?: (day: any) => (string | JSX.Element),
-        transformValue?: string,
-
-        // i18n
-        monthFormat?: string,
-    }
-    type CalendarMonthGrid = React.ClassicComponentClass<CalendarMonthGridShape>;
-    var CalendarMonthGrid: React.ClassicComponentClass<CalendarMonthGridShape>;   
-
-
-
-    interface CalendarMonthShape{
-        month?: momentPropTypes.momentObj,
-        isVisible?: boolean,
-        enableOutsideDays?: boolean,
-        modifiers?: any,
-        orientation?: ScrollableOrientationShape,
-        onDayClick?: (day: any, e: React.EventHandler<React.MouseEvent<HTMLTableDataCellElement>>) => void,
-        onDayMouseEnter?: (day: any, e: React.EventHandler<React.MouseEvent<HTMLTableDataCellElement>>) => void,
-        onDayMouseLeave?: (day: any, e: React.EventHandler<React.MouseEvent<HTMLTableDataCellElement>>) => void,
-        renderDay?: (day: any) => (string | JSX.Element),
-
-        // i18n
-        monthFormat?: string,
-    } 
-    type CalendarMonth = React.ClassicComponentClass<CalendarMonthShape>;
-    var CalendarMonth: React.ClassicComponentClass<CalendarMonthShape>;   
-    
-
-    interface CalendarDayShape{
-        day?: momentPropTypes.momentObj,
-        isOutsideDay?: boolean,
-        modifiers?: any,
-        onDayClick?: (day: any, e: React.EventHandler<React.MouseEvent<HTMLTableDataCellElement>>) => void,
-        onDayMouseEnter?: (day: any, e: React.EventHandler<React.MouseEvent<HTMLTableDataCellElement>>) => void,
-        onDayMouseLeave?: (day: any, e: React.EventHandler<React.MouseEvent<HTMLTableDataCellElement>>) => void,
-        renderDay?: (day: any) => (string | JSX.Element),
-    }
-    type CalendarDay = React.ClassicComponentClass<CalendarDayShape>;
-    var CalendarDay: React.ClassicComponentClass<CalendarDayShape>;   
-
-
-
-
+    // UTILS
+    //
+    // utils/isInclusivelyAfterDay.js
     var isInclusivelyAfterDay: (a: moment.Moment, b: moment.Moment) => boolean;
+    // utils/isInclusivelyBeforeDay.js
     var isInclusivelyBeforeDay: (a: moment.Moment, b: moment.Moment) => boolean;
+    // utils/isNextDay.js
     var isNextDay: (a: moment.Moment, b: moment.Moment) => boolean;
+    // utils/isSameDay.js
     var isSameDay: (a: moment.Moment, b: moment.Moment) => boolean;
-
+    // utils/toISODateString.js
     var toISODateString: (date: moment.MomentInput, currentFormat: moment.MomentFormatSpecification) => string | null;
-    var toLocalizedDateString: (date: moment.MomentInput, currentFormat: moment.MomentFormatSpecification) => string | null;
-    
-    var toMomentObject: (dateString: moment.MomentInput, customFormat: moment.MomentFormatSpecification) => moment.Moment | null;    
+    // utils/toLocalizedDateString.js
+    var toLocalizedDateString: (
+        date: moment.MomentInput,
+        currentFormat: moment.MomentFormatSpecification
+    ) => string | null;
+    // utils/toMomentObject.js
+    var toMomentObject: (
+        dateString: moment.MomentInput,
+        customFormat: moment.MomentFormatSpecification
+    ) => moment.Moment | null;
 }

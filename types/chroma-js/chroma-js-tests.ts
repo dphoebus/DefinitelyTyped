@@ -1,13 +1,17 @@
-
-
-import * as myChroma from "chroma-js";
+import { Color } from "chroma-js";
+import chroma = require("chroma-js");
 
 function test_chroma() {
     chroma('hotpink');
     chroma('#ff3399');
     chroma('F39');
     chroma.hex("#fff");
-    
+    chroma.valid(0);
+    chroma.valid('');
+    chroma.valid({});
+    chroma.valid(null);
+    chroma.valid(undefined);
+
     chroma(0xff3399);
     chroma(0xff, 0x33, 0x99);
     chroma(255, 51, 153);
@@ -37,20 +41,20 @@ function test_chroma() {
     chroma.contrast('pink', 'hotpink');
     chroma.contrast('pink', 'purple');
     chroma.brewer.OrRd;
-    var data = [3.0, 3.5, 3.6, 3.8, 3.8, 4.1, 4.3, 4.4,
+    const data = [3.0, 3.5, 3.6, 3.8, 3.8, 4.1, 4.3, 4.4,
         4.6, 4.9, 5.2, 5.3, 5.4, 5.7, 5.8, 5.9,
         6.2, 6.5, 6.8, 7.2, 9];
     chroma.limits(data, 'e', 5);
     chroma.limits(data, 'q', 5);
     chroma.limits(data, 'k', 5);
 
-    myChroma(0xff3399);
-    myChroma.limits(data, 'k', 5);
+    chroma(0xff3399);
+    chroma.limits(data, 'k', 5);
 }
 
 function test_color() {
     chroma('red').alpha(0.5);
-    chroma('rgba(255,0,0,0.35)').alpha();
+    chroma('rgba(255,0,0,0.35)').alpha() === 0.35;
     chroma('hotpink').darken();
     chroma('hotpink').darken(2);
     chroma('hotpink').brighten();
@@ -83,6 +87,9 @@ function test_color() {
     chroma('aquamarine').luminance(0.5, 'lab');
     chroma('aquamarine').luminance(0.5, 'hsl');
     chroma('orange').hex();
+    chroma('orange').hex('auto');
+    chroma('orange').hex('rgb');
+    chroma('orange').alpha(0.5).hex('rgba');
     chroma('#ffa500').name();
     chroma('#ffa505').name();
     chroma('teal').css();
@@ -105,13 +112,21 @@ function test_color() {
     chroma('#b3ccff').temperature();
     chroma('33cc00').gl();
 
-    myChroma('teal').alpha(0.5).css();
-    myChroma('teal').css('hsl');
-    myChroma('orange').rgb();
+    chroma('teal').alpha(0.5).css();
+    chroma('teal').css('hsl');
+    chroma('orange').rgb();
+    chroma('orange').rgb(true);
+    chroma('orange').rgba();
+    chroma('orange').rgba(true);
+
+    chroma('#000000').num();
+    chroma('#0000ff').num();
+    chroma('#00ff00').num();
+    chroma('#ff0000').num();
 }
 
 function test_scale() {
-    var f = chroma.scale();
+    const f = chroma.scale();
     f(0.25);
     f(0.5);
     f(0.75);
@@ -173,7 +188,7 @@ function test_scale() {
     chroma.scale('OrRd').classes(5);
     chroma.scale('OrRd').classes(8);
 
-    myChroma.cubehelix()
+    chroma.cubehelix()
         .start(200)
         .rotations(-0.35)
         .gamma(0.7)
@@ -183,6 +198,17 @@ function test_scale() {
         .correctLightness()
         .colors(5);
 
-    myChroma.scale('RdYlBu');
-    myChroma.scale('RdYlBu').padding(0.15);
+    chroma.scale('RdYlBu');
+    chroma.scale('RdYlBu').padding(0.15);
 }
+
+function test_types() {
+    const color: chroma.Color = chroma('orange');
+    const scale: chroma.Scale = chroma.scale('RdYlBu');
+}
+
+// the following should actually, pass, but TS can't disambiguate between a parameter
+// which is passed as undefined/null or not passed at all
+// const scaleColors1: Color[] = chroma.scale(['black', 'white']).colors(12);
+const scaleColors2: Color[] = chroma.scale(['black', 'white']).colors(12, null);
+const scaleColors3: Color[] = chroma.scale(['black', 'white']).colors(12, undefined);

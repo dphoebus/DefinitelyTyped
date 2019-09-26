@@ -1,5 +1,5 @@
 // Type definitions for bittorrent-protocol 2.2
-// Project: https://github.com/feross/bittorrent-protocol#readme
+// Project: https://github.com/webtorrent/bittorrent-protocol
 // Definitions by: Feross Aboukhadijeh <https://github.com/feross>, Tomasz Łaziuk <https://github.com/tlaziuk>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
@@ -10,30 +10,30 @@ import * as stream from 'stream';
 declare const BittorrentProtocol: BittorrentProtocol.BittorrentProtocol;
 
 declare namespace BittorrentProtocol {
-    export interface BittorrentProtocol {
+    interface BittorrentProtocol {
         new (): Wire;
         (): Wire;
     }
 
-    export interface ExtensionConstructor {
+    interface ExtensionConstructor {
         new (wire: Wire): Extension;
     }
 
-    export interface Extension {
-        onHandshake?: (infoHash: string, peerId: string, extensions: { [name: string]: boolean }) => void;
-        onExtendedHandshake?: (handshake: { [key: string]: any }) => void;
-        onMessage?: (buf: Buffer) => void;
+    interface Extension {
+        onHandshake?(infoHash: string, peerId: string, extensions: { [name: string]: boolean }): void;
+        onExtendedHandshake?(handshake: { [key: string]: any }): void;
+        onMessage?(buf: Buffer): void;
         name: string;
     }
 
-    export interface Request {
+    interface Request {
         piece: number;
         offset: number;
         length: number;
-        callback: () => void;
+        callback(): void;
     }
 
-    export interface Wire extends stream.Duplex {
+    interface Wire extends stream.Duplex {
         readonly peerId: string; // remote peer id (hex string)
         readonly peerIdBuffer: Buffer; // remote peer id (Buffer)
         readonly type: 'webrtc' | 'tcpIncoming' | 'tcpOutgoing' | 'webSeed'; // connection type
@@ -48,7 +48,7 @@ declare namespace BittorrentProtocol {
 
         setKeepAlive(enable: boolean): void;
 
-        setTimeot(ms: number, unref?: boolean): void;
+        setTimeout(ms: number, unref?: boolean): void;
 
         destroy(): void;
 
@@ -81,7 +81,7 @@ declare namespace BittorrentProtocol {
 
         // TODO: bitfield is a bitfield instance
         on(event: 'bitfield', listener: (bitfield: any) => void): this;
-        on(event: string | 'keep-alive' | 'choke' | 'unchoke' | 'interested' | 'uninterested' | 'timeout', listener: () => void): this;
+        on(event: 'keep-alive' | 'choke' | 'unchoke' | 'interested' | 'uninterested' | 'timeout', listener: () => void): this;
         on(event: 'upload' | 'have' | 'download' | 'port', listener: (length: number) => void): this;
         on(event: 'handshake', listener: (infoHash: string, peerId: string, extensions: Extension[]) => void): this;
         on(event: 'request', listener: (index: number, offset: number, length: number, respond: () => void) => void): this;
@@ -89,6 +89,7 @@ declare namespace BittorrentProtocol {
         on(event: 'cancel', listener: (index: number, offset: number, length: number) => void): this;
         on(event: 'extended', listener: (ext: 'handshake' | string, buf: any) => void): void;
         on(event: 'unknownmessage', listener: (buffer: Buffer) => void): this;
+        on(event: string, listener: (...args: any[]) => void): this;
     }
 }
 

@@ -1,42 +1,66 @@
-// Type definitions for dotenv 2.0
+// Type definitions for dotenv 6.1
 // Project: https://github.com/motdotla/dotenv
-// Definitions by: Jussi Kinnula <https://github.com/jussikinnula/>, Borek Bernard <https://github.com/borekb>, Eric Naeseth <https://github.com/enaeseth>
+// Definitions by: Jussi Kinnula <https://github.com/jussikinnula>
+//                 Borek Bernard <https://github.com/borekb>
+//                 Eric Naeseth <https://github.com/enaeseth>
+//                 Max Beatty <https://github.com/maxbeatty>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 /// <reference types="node" />
 
+export interface DotenvParseOptions {
+  /**
+   * You may turn on logging to help debug why certain keys or values are not being set as you expect.
+   */
+  debug?: boolean;
+}
+
+export interface DotenvParseOutput {
+  [name: string]: string;
+}
+
 /**
  * Parses a string or buffer in the .env file format into an object.
+ *
+ * @param src - contents to be parsed
+ * @param options - additional options
+ * @returns an object with keys and values based on `src`
  */
-export function parse(src: string | Buffer): {[name: string]: string};
+export function parse(
+  src: string | Buffer,
+  options?: DotenvParseOptions
+): DotenvParseOutput;
+
+export interface DotenvConfigOptions {
+  /**
+   * You may specify a custom path if your file containing environment variables is located elsewhere.
+   */
+  path?: string;
+
+  /**
+   * You may specify the encoding of your file containing environment variables.
+   */
+  encoding?: string;
+
+  /**
+   * You may turn on logging to help debug why certain keys or values are not being set as you expect.
+   */
+  debug?: boolean;
+}
+
+export interface DotenvConfigOutput {
+  error?: Error;
+  parsed?: DotenvParseOutput;
+}
 
 /**
- * Loads `.env` into `process.env`.
+ * Loads `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
+ * Example: 'KEY=value' becomes { parsed: { KEY: 'value' } }
  *
- * @param options
- * @return Object Object with the parsed keys and values, e.g., 'KEY=value' becomes { KEY: 'value' }
+ * @param options - controls behavior
+ * @returns an object with a `parsed` key if successful or `error` key if an error occurred
+ *
  */
-export function config(options?: DotenvOptions): {[name: string]: string} | false;
-
-export interface DotenvOptions {
-    /**
-     * Dotenv outputs a warning to your console if missing a .env file. Suppress this warning using silent.
-     *
-     * @default false
-     */
-    silent?: boolean;
-
-    /**
-     * You can specify a custom path if your file containing environment variables is named or located differently.
-     *
-     * @default '.env'
-     */
-    path?: string;
-
-    /**
-     * You may specify the encoding of your file containing environment variables using this option.
-     *
-     * @default 'utf8'
-     */
-    encoding?: string;
-}
+export function config(options?: DotenvConfigOptions): DotenvConfigOutput;
+/** @deprecated since v7.0.0 Use config instead. */
+export const load: typeof config;

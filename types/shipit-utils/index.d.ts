@@ -3,10 +3,10 @@
 // Definitions by: Cyril Schumacher <https://github.com/cyrilschumacher>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
-import shipit = require("shipit");
+import shipit = require("shipit-cli");
 
-type GruntOrShipit = typeof shipit | {};
-type EmptyCallback = () => void;
+export type GruntOrShipit = typeof shipit | {};
+export type EmptyCallback = () => void;
 
 export function equalValues(value: any[]): void;
 export function getShipit(gruntOrShipit: GruntOrShipit): typeof shipit;

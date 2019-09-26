@@ -118,7 +118,7 @@ function test_timeZone() {
 
 function test_widgetParent() {
     let nullW: null = null;
-    let str: string = "myId";
+    let str = "myId";
     let jquery = $("#element");
 
     $("#picker").datetimepicker({
@@ -157,7 +157,7 @@ function inputParser(inputDate: string | Date | moment.Moment) {
             return moment();
         }
     }
-};
+}
 
 function test_parseInputDate() {
     let undef: undefined;

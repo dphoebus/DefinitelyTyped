@@ -1,6 +1,6 @@
 // Type definitions for dropkickjs 2.1
-// Project: http://dropkickjs.com/
-// Definitions by: Dmitry Pesterev <https://github.com/VorobeY1326/>
+// Project: http://dropkickjs.com/, https://github.com/robdel12/dropkick
+// Definitions by: Dmitry Pesterev <https://github.com/VorobeY1326>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 interface DropkickOptions {
@@ -14,10 +14,10 @@ interface DropkickOptions {
     selectedOptions?: string[];
     value?: string;
 
-    change?: () => void;
-    close?: () => void;
-    initialize?: () => void;
-    open?: () => void;
+    change?(): void;
+    close?(): void;
+    initialize?(): void;
+    open?(): void;
 }
 
 declare class Dropkick {

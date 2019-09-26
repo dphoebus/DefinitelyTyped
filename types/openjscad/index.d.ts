@@ -2,14 +2,15 @@
 // Project: https://github.com/joostn/OpenJsCad
 // Definitions by: Dan Marshall <https://github.com/danmarshall>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// TypeScript Version: 2.8
 
 /// <reference types="three" />
 
-declare namespace THREE {
+declare module "three" {
     var CSG: {
         fromCSG: (csg: CSG, defaultColor: any) => {
-            colorMesh: Mesh;
-            wireframe: Mesh;
+            colorMesh: THREE.Mesh;
+            wireframe: THREE.Mesh;
             boundLen: number;
         };
         getGeometryVertex: (geometry: any, vertex_position: any) => number;

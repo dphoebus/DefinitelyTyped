@@ -1,14 +1,11 @@
 // Type definitions for json-stable-stringify 1.0
 // Project: https://github.com/substack/json-stable-stringify
-// Definitions by: Matt Frantz <https://github.com/mhfrantz/>
+// Definitions by: Matt Frantz <https://github.com/mhfrantz>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
-
 
 declare function stringify(obj: any, opts?: stringify.Comparator | stringify.Options): string;
 
 declare namespace stringify {
-
     interface Element {
         key: string;
         value: any;

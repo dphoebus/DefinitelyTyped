@@ -1,5 +1,5 @@
-import { FusionChartStatic } from "fusioncharts";
+import { FusionChartStatic } from ".";
 
-declare var zoomscatter: (H: FusionChartStatic) => FusionChartStatic;
+declare function zoomscatter(H: FusionChartStatic): FusionChartStatic;
 export = zoomscatter;
 export as namespace zoomscatter;

@@ -131,7 +131,7 @@ function BaseClassExtensions_Array_Tests() {
     Array.contains(arrayVar, "zero");
     Array.dequeue(arrayVar);
     Array.enqueue(arrayVar, "zero");
-    Array.insert([1, 2, 3], 1, {});
+    Array.insert([1, 2, 3], 1, 123);
     Array.isArray({});
     Array.parse("1, 2, 3, 4, 5");
     Array.remove([1, 2, 3], 2);
@@ -548,6 +548,11 @@ function Sys_Res_Tests() {
     var invokeCalledTwice = Sys.Res.invokeCalledTwice;
     var notImplemented = Sys.Res.notImplemented;
     var nullWebRequest = Sys.Res.nullWebRequest;
+    var undefinedEvent = Sys.Res.undefinedEvent;
+    var eventHandlerNotFunction = Sys.Res.eventHandlerNotFunction;
+    var propertyUndefined = Sys.Res.propertyUndefined;
+    var propertyNotAnArray = Sys.Res.propertyNotAnArray;
+    var propertyNotWritable = Sys.Res.propertyNotWritable;
 }
 
 function Sys_StringBuilder_Tests() {

@@ -5,7 +5,7 @@ import responseTime = require('response-time');
 // expressconnect tests https://github.com/expressjs/response-time#expressconnect //
 ////////////////////////////////////////////////////////////////////////////////////
 import express = require('express')
-namespace express_connect_tests {
+{
     const app = express()
     app.use(responseTime())
 }
@@ -15,7 +15,7 @@ namespace express_connect_tests {
 // vanilla http server tests https://github.com/expressjs/response-time#vanilla-http-server //
 //////////////////////////////////////////////////////////////////////////////////////////////
 import http = require('http')
-namespace vanilla_http_server_tests {
+{
     // create "middleware"
     var _responseTime = responseTime()
     http.createServer(function (req, res) {
@@ -33,9 +33,9 @@ namespace vanilla_http_server_tests {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // response time metrics tests https://github.com/expressjs/response-time#response-time-metrics //
 //////////////////////////////////////////////////////////////////////////////////////////////////
-namespace response_time_metrics_tests {
-    const app = express()
-    app.use(responseTime(function (req, res, time) {
+{
+    const app = express();
+    app.use(responseTime((req: express.Request, res: express.Response, time: number) => {
         let num: number = time;
     }));
 }

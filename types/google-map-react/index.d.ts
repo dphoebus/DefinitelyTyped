@@ -1,24 +1,57 @@
-// Type definitions for google-map-react 0.22
-// Project: https://github.com/istarkov/google-map-react
+// Type definitions for google-map-react 1.1
+// Project: https://github.com/google-map-react/google-map-react
 // Definitions by: Honza Brecka <https://github.com/honzabrecka>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.1
+// TypeScript Version: 2.8
 
 import * as React from 'react';
 
-export interface BootstrapURLKeys {
-  key: string;
-  language?: string;
+export type BootstrapURLKeys = ({ key: string; } | { client: string; v: string; }) & { language?: string };
+
+export interface MapTypeStyle {
+  elementType?: string;
+  featureType?: string;
+  stylers: any[];
 }
 
-export interface Options {
-  styles?: any[];
-  scrollwheel?: boolean;
-  panControl?: boolean;
-  mapTypeControl?: boolean;
-  minZoomOverride?: boolean;
-  minZoom?: number;
+export interface MapOptions {
+  // Any options from https://developers.google.com/maps/documentation/javascript/reference/3/#MapOptions
+  // excluding 'zoom' and 'center' which get set via props.
+  backgroundColor?: string;
+  clickableIcons?: boolean;
+  disableDefaultUI?: boolean;
+  disableDoubleClickZoom?: boolean;
+  draggable?: boolean;
+  draggableCursor?: string;
+  draggingCursor?: string;
+  fullscreenControl?: boolean;
+  fullscreenControlOptions?: { position: number };
   gestureHandling?: string;
+  heading?: number;
+  heatmapLibrary?: boolean;
+  keyboardShortcuts?: boolean;
+  mapTypeControl?: boolean;
+  mapTypeControlOptions?: any;
+  mapTypeId?: string;
+  minZoom?: number;
+  maxZoom?: number;
+  noClear?: boolean;
+  options?: (maps: Maps) => Props;
+  panControl?: boolean;
+  panControlOptions?: { position: number };
+  rotateControl?: boolean;
+  rotateControlOptions?: { position: number };
+  scaleControl?: boolean;
+  scaleControlOptions?: any;
+  scrollwheel?: boolean;
+  streetView?: any;
+  streetViewControl?: boolean;
+  streetViewControlOptions?: { position: number };
+  styles?: MapTypeStyle[];
+  tilt?: number;
+  zoomControl?: boolean;
+  zoomControlOptions?: { position: number };
+  minZoomOverride?: boolean; // Not a standard option; specific to google-map-react: https://github.com/google-map-react/google-map-react/pull/154
 }
 
 export interface Maps {
@@ -48,36 +81,75 @@ export interface Maps {
   UnitSystem: any;
 }
 
+export interface Bounds {
+  nw: Coords;
+  ne: Coords;
+  sw: Coords;
+  se: Coords;
+}
+
+export interface Point {
+  x: number;
+  y: number;
+}
+
+export interface Coords {
+  lat: number;
+  lng: number;
+}
+
+export interface Size {
+  width: number;
+  height: number;
+}
+
+export interface ClickEventValue extends Point, Coords {
+  event: any;
+}
+
+export interface ChangeEventValue {
+  center: Coords;
+  zoom: number;
+  bounds: Bounds;
+  marginBounds: Bounds;
+  size: Size;
+}
+
 export interface Props {
   bootstrapURLKeys?: BootstrapURLKeys;
-  defaultCenter?: [number, number] | { lat: number, lng: number };
-  center?: [number, number] | { lat: number, lng: number };
+  defaultCenter?: Coords;
+  center?: Coords;
   defaultZoom?: number;
   zoom?: number;
   hoverDistance?: number;
-  options?: Options | ((maps: Maps) => Options);
+  options?: MapOptions | ((maps: Maps) => MapOptions);
   margin?: any[];
   debounced?: boolean;
+  draggable?: boolean;
   layerTypes?: string[];
-  onClick?({x, y, lat, lng, event}: { x: number, y: number, lat: number, lng: number, event: any }): any;
-  onChange?({ center, zoom, bounds, marginBounds }: { center: [number, number], zoom: number, bounds: [number, number, number, number], marginBounds: [number, number, number, number] }): any;
+  onClick?(value: ClickEventValue): any;
+  onChange?(value: ChangeEventValue): any;
   resetBoundsOnResize?: boolean;
   onChildClick?(hoverKey: any, childProps: any): void;
   onChildMouseEnter?(hoverKey: any, childProps: any): void;
   onChildMouseLeave?(hoverKey: any, childProps: any): void;
+  onChildMouseDown?(childKey: any, childProps: any, mouse: any): void;
+  onChildMouseUp?(childKey: any, childProps: any, mouse: any): void;
+  onChildMouseMove?(childKey: any, childProps: any, mouse: any): void;
+  onDrag?(args: any): void;
   onZoomAnimationStart?(args: any): void;
   onZoomAnimationEnd?(args: any): void;
   onMapTypeIdChange?(args: any): void;
-  distanceToMouse?(pt: {x: number, y: number}, mousePos: {x: number, y: number}): void;
+  distanceToMouse?(pt: Point, mousePos: Point, markerProps?: object): number;
   googleMapLoader?(bootstrapURLKeys: any): void;
-  onGoogleApiLoaded?({map, maps}: { map: any, maps: any }): void;
+  onGoogleApiLoaded?(maps: { map: any, maps: any }): void;
+  onTilesLoaded?(): void;
   yesIWantToUseGoogleMapApiInternals?: boolean;
+  style?: React.HTMLProps<HTMLDivElement>;
 }
 
-export default class GoogleMapReact extends React.Component<Props, void> {}
+export default class GoogleMapReact extends React.Component<Props> {}
 
-export interface ChildComponentProps {
-  lat: number;
-  lng: number;
+export interface ChildComponentProps extends Coords {
   $hover?: boolean;
 }

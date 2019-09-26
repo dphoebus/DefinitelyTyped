@@ -1,4 +1,4 @@
-import * as Protocol from 'bittorrent-protocol';
+import Protocol = require('bittorrent-protocol');
 import * as net from 'net';
 
 class TestExtension implements Protocol.Extension {
@@ -7,7 +7,7 @@ class TestExtension implements Protocol.Extension {
 }
 
 net.createServer(socket => {
-    var wire = new Protocol();
+    const wire = new Protocol();
 
     wire.use(TestExtension);
 

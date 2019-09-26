@@ -9,6 +9,10 @@ $(() => {
             type: "arearange"
         },
 
+        xAxis: {
+            scrollbar: { enabled: true }
+        },
+
         navigator: {
             height: 80,
             maskFill: 'rgba(255, 198, 220, 0.75)',
@@ -21,6 +25,14 @@ $(() => {
         rangeSelector: {
             allButtonsEnabled: true,
             selected: 1,
+            buttons: [{
+                type: 'month',
+                count: 1,
+                text: '1m',
+                events: {
+                    click: () => { }
+                }
+            }],
             buttonTheme: { // styles for the buttons
                 fill: 'none',
                 stroke: 'none',
@@ -54,10 +66,10 @@ $(() => {
             }
         },
 
-        series: [<Highcharts.AreaRangeChartSeriesOptions> {
+        series: [{
             name: 'USD to EUR',
             data: someData,
             lineColor: "blue"
-        }]
+        } as Highcharts.AreaRangeChartSeriesOptions]
     });
 });

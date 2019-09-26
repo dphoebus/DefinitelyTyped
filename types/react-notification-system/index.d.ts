@@ -1,24 +1,25 @@
 // Type definitions for React Notification System 0.2
 // Project: https://www.npmjs.com/package/react-notification-system
-// Definitions by: Giedrius Grabauskas <https://github.com/GiedriusGrabauskas>, Deividas Bakanas <https://github.com/DeividasBakanas>, Karol Janyst <https://github.com/LKay>
+// Definitions by: Giedrius Grabauskas <https://github.com/GiedriusGrabauskas>, Deividas Bakanas <https://github.com/DeividasBakanas>, Karol Janyst <https://github.com/LKay>, Bartosz Szewczyk <https://github.com/sztobar>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.1
+// TypeScript Version: 2.8
 
 import * as React from "react";
 
 declare namespace NotificationSystem {
 
-    export interface System extends React.Component<any, any> {
+    export interface System extends React.Component<Attributes, State> {
         addNotification(notification: Notification): Notification;
         removeNotification(uidOrNotification: number | string | Notification): void;
         clearNotifications(): void;
+        editNotification(uidOrNotification: number | string | Notification, newNotification: Notification): void;
     }
 
     export type CallBackFunction = (notification: Notification) => void;
 
     export interface Notification {
-        title?: string;
-        message?: string;
+        title?: string | JSX.Element;
+        message?: string | JSX.Element;
         level?: "error" | "warning" | "info" | "success";
         position?: "tr" | "tl" | "tc" | "br" | "bl" | "bc";
         autoDismiss?: number;
@@ -68,11 +69,14 @@ declare namespace NotificationSystem {
         ActionWrapper?: WrapperStyle;
     }
 
-    export interface Attributes {
+    export interface Attributes extends React.ClassAttributes<System> {
         noAnimation?: boolean;
-        ref?: string;
         style?: Style | boolean;
         allowHTML?: boolean;
+    }
+
+    export interface State {
+        notifications: Notification[]
     }
 }
 

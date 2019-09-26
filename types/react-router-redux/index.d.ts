@@ -1,63 +1,83 @@
-// Type definitions for react-router-redux 4.0
-// Project: https://github.com/rackt/react-router-redux
-// Definitions by: Isman Usoh <http://github.com/isman-usoh>
-//                 Noah Shipley <https://github.com/noah79>
-//                 Dimitri Rosenberg <https://github.com/rosendi>
-//                 Karol Janyst <https://github.com/LKay>
-//                 Dovydas Navickas <https://github.com/DovydasNavickas>
+// Type definitions for react-router-redux 5.0
+// Project: https://github.com/reactjs/react-router-redux
+// Definitions by: Huy Nguyen <https://github.com/huy-nguyen>
+//                 Shoya Tanaka <https://github.com/8398a7>
+//                 Mykolas <https://github.com/mykolas>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.1
+// TypeScript Version: 3.0
 
-import { Action, Middleware, Store } from "redux";
-import { History, Location, LocationDescriptor } from "history";
+import {
+    Store,
+    Dispatch,
+    Middleware,
+    Reducer
+} from 'redux';
+import {
+    History,
+    Location,
+    Path,
+    LocationState,
+    LocationDescriptor
+} from 'history';
+import * as React from 'react';
+import { match } from 'react-router';
 
-export const CALL_HISTORY_METHOD: string;
-export const LOCATION_CHANGE: string;
+export interface ConnectedRouterProps<State> {
+    store?: Store<State>;
+    history: History;
+}
+export class ConnectedRouter<State> extends React.Component<ConnectedRouterProps<State>> {}
+
+export const LOCATION_CHANGE = '@@router/LOCATION_CHANGE';
+
+export interface RouterState {
+    location: Location | null;
+}
+
+export const routerReducer: Reducer<RouterState>;
+
+export const CALL_HISTORY_METHOD = '@@router/CALL_HISTORY_METHOD';
+
+export function push(location: LocationDescriptor, state?: LocationState): RouterAction;
+export function replace(location: LocationDescriptor, state?: LocationState): RouterAction;
+export function go(n: number): RouterAction;
+export function goBack(): RouterAction;
+export function goForward(): RouterAction;
+
+export const routerActions: {
+    push: typeof push
+    replace: typeof replace
+    go: typeof go
+    goBack: typeof goBack
+    goForward: typeof goForward
+};
 
 export interface LocationActionPayload {
     method: string;
     args?: any[];
 }
 
-export interface RouterAction extends Action {
-    payload?: LocationActionPayload;
+export interface RouterAction {
+    type: typeof CALL_HISTORY_METHOD;
+    payload: LocationActionPayload;
 }
 
-type LocationAction = (nextLocation: LocationDescriptor) => RouterAction;
-type GoAction = (n: number) => RouterAction;
-type NavigateAction = () => RouterAction;
-
-export const push: LocationAction;
-export const replace: LocationAction;
-export const go: GoAction;
-export const goBack: NavigateAction;
-export const goForward: NavigateAction;
-
-interface RouteActions {
-    push: typeof push;
-    replace: typeof replace;
-    go: typeof go;
-    goForward: typeof goForward;
-    goBack: typeof goBack;
+export interface LocationChangeAction {
+    type: typeof LOCATION_CHANGE;
+    payload: Location & {
+        props?: {
+            match: {
+                path: string;
+                url: string;
+                params: any;
+                isExact: boolean;
+            },
+            location: Location;
+            history: History;
+        }
+    };
 }
 
-export const routerActions: RouteActions;
-
-export interface RouterState {
-    locationBeforeTransitions: Location;
-}
-
-export type DefaultSelectLocationState = (state: any) => RouterState;
-
-export interface SyncHistoryWithStoreOptions {
-    selectLocationState?: DefaultSelectLocationState;
-    adjustUrlOnReplay?: boolean;
-}
-
-export interface HistoryUnsubscribe {
-    unsubscribe(): void;
-}
-
-export function routerReducer(state?: RouterState, action?: Action): RouterState;
-export function syncHistoryWithStore(history: History, store: Store<any>, options?: SyncHistoryWithStoreOptions): History & HistoryUnsubscribe;
 export function routerMiddleware(history: History): Middleware;
+
+export function createMatchSelector(path: string): (state: { router: RouterState }) => match | null;

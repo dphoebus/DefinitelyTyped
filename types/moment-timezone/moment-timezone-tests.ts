@@ -10,19 +10,20 @@ const d = moment.tz("May 12th 2014 8PM", "MMM Do YYYY hA", true, "America/Toront
 
 a.tz();
 
-const num = 1367337600000,
-    arr = [2013, 5, 1],
-    str = "2013-12-01",
-    date = new Date(2013, 4, 1),
-    mo = moment([2013, 4, 1]),
-    obj = { year : 2013, month : 5, day : 1 },
-    format = "YYYY-MM-DD",
-    formats = ["YYYY-MM-DD", "YYYY/MM/DD"],
-    formatsIncludingSpecial = ["YYYY-MM-DD", moment.ISO_8601],
-    language = "en";
+const num = 1367337600000;
+const arr = [2013, 5, 1];
+const str = "2013-12-01";
+const date = new Date(2013, 4, 1);
+const mo = moment([2013, 4, 1]);
+const obj = { year : 2013, month : 5, day : 1 };
+const format = "YYYY-MM-DD";
+const formats = ["YYYY-MM-DD", "YYYY/MM/DD"];
+const formatsIncludingSpecial = ["YYYY-MM-DD", moment.ISO_8601];
+const language = "en";
 
 moment.tz();
 moment.tz("America/Los_Angeles");
+moment.tz("America/Los_Angeles").tz("Asia/Tomsk", true);
 
 moment.tz(num, "America/Los_Angeles");
 moment.tz(arr, "America/Los_Angeles");
@@ -49,7 +50,7 @@ moment.tz(mo, "America/Los_Angeles");
 moment.tz(obj, "America/Los_Angeles");
 
 moment.tz.zone('America/Los_Angeles').abbr(1403465838805);
-moment.tz.zone('America/Los_Angeles').offset(1403465838805);
+moment.tz.zone('America/Los_Angeles').utcOffset(1403465838805);
 
 const zone = moment.tz.zone('America/New_York');
 zone.parse(Date.UTC(2012, 2, 19, 8, 30)); // 240
@@ -76,8 +77,14 @@ moment.tz.names();
 
 moment.tz.setDefault('America/Los_Angeles');
 
+moment.tz.setDefault();
+
 moment.tz.guess();
+
+moment.tz.guess(true);
 
 const zoneAbbr: string = moment.tz('America/Los_Angeles').zoneAbbr();
 
 const zoneName: string = moment.tz('America/Los_Angeles').zoneName();
+
+const zoneType: string | undefined = moment.tz('2013-11-18 11:55').tz();

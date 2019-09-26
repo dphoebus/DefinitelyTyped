@@ -1,5 +1,5 @@
-import { FusionChartStatic } from "fusioncharts";
+import { FusionChartStatic } from "..";
 
-declare var usa: (H: FusionChartStatic) => FusionChartStatic;
+declare function usa(H: FusionChartStatic): FusionChartStatic;
 export = usa;
 export as namespace usa;

@@ -1,5 +1,3 @@
-/* tslint:disable */
-
 module AccordionComponent {
     $(function () {
         var sample = new ej.Accordion($("#basicAccordion"), {
@@ -59,7 +57,6 @@ module AutocompleteComponent{
 
 
 
-
 module Barcodecomponent {
     $(function () {
         var barcodesample = new ej.datavisualization.Barcode($("#Barcode"), {
@@ -76,6 +73,35 @@ module Bulletgraphcomponent {
     $(function () {
         var bulletsample = new ej.datavisualization.BulletGraph($("#BulletGraph"), {
             isResponsive: true,
+            load: function () {
+                var sender = $("#BulletGraph").data("ejBulletGraph");
+                var bulletTheme = (<any>window).themeStyle + (<any>window).themeColor + (<any>window).themeVarient;
+                if (bulletTheme) {
+                    switch (bulletTheme) {
+                        case "flatdark":
+                        case "flatazuredark":
+                        case "flatlimedark":
+                        case "flatsaffrondark":
+                        case "gradientdark":
+                        case "gradientazuredark":
+                        case "gradientlimedark":
+                        case "gradientsaffrondark":
+                        case "flathigh-contrast-01dark":
+                        case "flathigh-contrast-02dark":
+                            bulletTheme = "flatdark";
+                            break;
+                        case "flatoffice-365light":
+                        case "flatmateriallight":
+                            bulletTheme = "material";
+                            break;
+                        default:
+                           bulletTheme = "flatlight";
+                            break;
+                    }
+                    sender.model.theme = bulletTheme;
+                }
+
+            },
             tooltipSettings: { visible: true },
             quantitativeScaleSettings: {
                 featureMeasures: [{
@@ -166,7 +192,6 @@ module ChartComponent {
                 range: { min: 25, max: 50, interval: 5 },
                 labelFormat: "{value}%",
                 title: { text: "Efficiency" },
-
             },
             commonSeriesOptions:
 			{
@@ -184,32 +209,32 @@ module ChartComponent {
                  border : {width: 2}
             },
             series:
-			[
-			    {
-                points: [{ x: 2005, y: 28 }, { x: 2006, y: 25 },{ x: 2007, y: 26 }, { x: 2008, y: 27 },
-						 { x: 2009, y: 32 }, { x: 2010, y: 35 }, { x: 2011, y: 30 }],
-                name: 'India'
+            [
+                {
+                    points: [{ x: 2005, y: 28 }, { x: 2006, y: 25 }, { x: 2007, y: 26 }, { x: 2008, y: 27 },
+                        { x: 2009, y: 32 }, { x: 2010, y: 35 }, { x: 2011, y: 30 }],
+                    name: 'India'
                 },
                 {
-                points: [{ x: 2005, y: 31 }, { x: 2006, y: 28 },{ x: 2007, y: 30 }, { x: 2008, y: 36 },
-						 { x: 2009, y: 36 }, { x: 2010, y: 39 }, { x: 2011, y: 37 }],
-                name: 'Germany'
-                },
-				{
-                points: [{ x: 2005, y: 36 }, { x: 2006, y: 32 },{ x: 2007, y: 34 }, { x: 2008, y: 41 },
-						 { x: 2009, y: 42 }, { x: 2010, y: 42 }, { x: 2011, y: 43 }],
-                name: 'England'
+                    points: [{ x: 2005, y: 31 }, { x: 2006, y: 28 }, { x: 2007, y: 30 }, { x: 2008, y: 36 },
+                        { x: 2009, y: 36 }, { x: 2010, y: 39 }, { x: 2011, y: 37 }],
+                    name: 'Germany'
                 },
                 {
-                points: [{ x: 2005, y: 39 }, { x: 2006, y: 36 },{ x: 2007, y: 40 }, { x: 2008, y: 44 },
-						 { x: 2009, y: 45 }, { x: 2010, y: 48 }, { x: 2011, y: 46 }],
-                name: 'France'
-				}
+                    points: [{ x: 2005, y: 36 }, { x: 2006, y: 32 }, { x: 2007, y: 34 }, { x: 2008, y: 41 },
+                        { x: 2009, y: 42 }, { x: 2010, y: 42 }, { x: 2011, y: 43 }],
+                    name: 'England'
+                },
+                {
+                    points: [{ x: 2005, y: 39 }, { x: 2006, y: 36 }, { x: 2007, y: 40 }, { x: 2008, y: 44 },
+                        { x: 2009, y: 45 }, { x: 2010, y: 48 }, { x: 2011, y: 46 }],
+                    name: 'France'
+                }
             ],
             isResponsive: true,
             load: function () {
                 var sender = $("#Chart").data("ejChart");
-                if (!!window.orientation && sender) {           //to modify chart properties for mobile view
+                if (!!window.orientation && sender) { //to modify chart properties for mobile view
                     var model = sender.model,
                         seriesLength = model.series.length;
                     model.legend.visible = false;
@@ -232,14 +257,52 @@ module ChartComponent {
                     model.primaryYAxis.labelIntersectAction = "rotate45";
                     model.primaryYAxis.edgeLabelPlacement = "hide";
                 }
+                var theme = (<any>window).themeStyle + (<any>window).themeColor + (<any>window).themeVarient;
+                if (theme) {
+                    switch (theme) {
+                        case "flatdark":
+                        case "flatazuredark":
+                        case "flatlimedark":
+                        case "flatsaffrondark":
+                            theme = "flatdark";
+                            break;
+                        case "gradientlight":
+                        case "gradientazurelight":
+                        case "gradientlimelight":
+                        case "gradientsaffronlight":
+                            theme = "gradientlight";
+                            break;
+                        case "gradientdark":
+                        case "gradientazuredark":
+                        case "gradientlimedark":
+                        case "gradientsaffrondark":
+                            theme = "gradientdark";
+                            break;
+                        case "flatbootstraplight":
+                            theme = "bootstrap";
+                            break;
+                        case "flathigh-contrast-01dark":
+                        case "flathigh-contrast-02dark":
+                            theme = "high-contrast-01";
+                            break;
+                        case "flatmateriallight":
+                        case "flatoffice-365light":
+                            theme = "material";
+                            break;
+
+                        default:
+                            theme = "flatlight";
+                            break;
+                    }
+                    sender.model.theme = theme;
+                }
             },
             title: { text: 'Efficiency of oil-fired power production' },
             size: { height: "600" },
-            legend: { visible: true}
+            legend: { visible: true},
         });
     });
 }
-
 
 
 
@@ -297,7 +360,6 @@ module circulargaugecomponent {
 
 
 
-
 module ColorPickerComponent {
     $(function () {
         var colorSample = new ej.ColorPicker($("#colorpick"), {
@@ -309,6 +371,26 @@ module ColorPickerComponent {
 
 
 
+module ComboBoxComponent{
+    var BikeList = [
+        { empid: "bk1", text: "Apache RTR" }, { empid: "bk2", text: "CBR 150-R" }, { empid: "bk3", text: "CBZ Xtreme" },
+        { empid: "bk4", text: "Discover" }, { empid: "bk5", text: "Dazzler" }, { empid: "bk6", text: "Flame" },
+        { empid: "bk7", text: "Fazzer" }, { empid: "bk8", text: "FZ-S" }, { empid: "bk9", text: "Pulsar" },
+        { empid: "bk10", text: "Shine" }, { empid: "bk11", text: "R15" }, { empid: "bk12", text: "Unicorn" }
+    ];
+    $(function () {
+        var comboboxInstance =new ej.ComboBox($("#selectCar"), {
+            width: "100%",
+            placeholder: "Select a Bike",
+			fields: { text: "text", value: "empid" },
+            dataSource: BikeList,
+            autofill: true
+        });
+    });
+}
+
+
+
 module DatePickerComponent {
     $(function () {
         var dateSample = new ej.DatePicker($("#datepick"), {
@@ -317,6 +399,16 @@ module DatePickerComponent {
     });
 }
 
+
+
+
+module DateTimePickerComponent {
+    $(function () {
+        var datetimeSample = new ej.DateRangePicker($("#daterangepick"), {
+            width: "100%"
+        });
+    });
+}
 
 
 
@@ -377,7 +469,6 @@ $(function () {
             createConnector({ name: "connector6", sourceNode: "Project", targetNode: "Resources", labels: [createLabel({ "text": "No" })] })
         ]
     });
-
 });
 
 function createNode(option: ej.datavisualization.Diagram.Node) {
@@ -483,9 +574,7 @@ module DropDownListComponent {
             showRoundedCorner: true
         });
     });
-
 }
-
 
 
 
@@ -525,8 +614,8 @@ module GanttComponent {
         durationMapping: "duration",
         endDateMapping: "endDate",
         childMapping: "subtasks",
-        scheduleStartDate: "02/01/2014",
-        scheduleEndDate: "04/09/2014",
+        scheduleStartDate: "02/01/2017",
+        scheduleEndDate: "04/09/2017",
         //Resources mapping
         resourceInfoMapping: "resourceId",
         resourceNameMapping: "resourceName",
@@ -644,14 +733,10 @@ $(function () {
 
 
 
-declare var window:myWindow;
-export interface myWindow extends Window{
-kanbanData:any;
-}
 module KanbanComponent {
     $(function () {
         var sample = new ej.Kanban($("#Kanban"), {
-            dataSource: new ej.DataManager(<any>window["kanbanData"]).executeLocal(new ej.Query().take(20)),
+           dataSource: new ej.DataManager((<any>window).kanbanData).executeLocal(new ej.Query().take(20)),
             columns: [
                 { headerText: "Backlog", key: "Open" },
                 { headerText: "In Progress", key: "InProgress" },
@@ -669,8 +754,6 @@ module KanbanComponent {
         });
     });
 }
-
-
 
 
 module lineargaugecomponent {
@@ -700,8 +783,6 @@ module lineargaugecomponent {
         });
     });
 }
-
-
 
 
 
@@ -955,7 +1036,6 @@ module mapcomponenet {
 
 
 
-
 module MenuComponent {
     $(function () {
         var sample = new ej.Menu($("#syncfusionProducts"),{
@@ -972,16 +1052,9 @@ module MenuComponent {
             showSubLevelArrows: true,
             subMenuDirection: ej.Direction.Right,
             titleText: "Menu",
-
         });
     });
-
 }
-
-
-
-
-
 
 
 
@@ -1023,7 +1096,7 @@ module PivotChartOlap {
     $(function () {
         var sample = new ej.PivotChart($("#PivotChart"),{
             dataSource: {
-			data: "http://bi.syncfusion.com/olap/msmdpump.dll",
+			data: "//bi.syncfusion.com/olap/msmdpump.dll",
 			catalog: "Adventure Works DW 2008 SE",
 			cube: "Adventure Works",
 			rows: [
@@ -1055,7 +1128,16 @@ module PivotChartOlap {
 		size: { height: "460px", width: "100%" },
 		primaryXAxis: { title: { text: "Date - Fiscal" }, labelRotation: 0 },
 		primaryYAxis: { title: { text: "Internet Sales Amount" } },
-		legend: { visible: true, rowCount: 2 }
+		legend: { visible: true, rowCount: 2 },
+        load: function () {
+                var PivotChart = (<any>window).themeStyle + (<any>window).themeColor + (<any>window).themeVarient;
+                PivotChart = PivotChart.toString();
+                if (PivotChart.indexOf("dark") > -1 || PivotChart.indexOf("contrast") > -1)
+                    PivotChart = "flatdark";
+                else
+                    PivotChart = "flatlight";
+                this.model.theme = PivotChart;
+            },
         });
     });
 }
@@ -1129,7 +1211,16 @@ module PivotChartRelational {
 		},
 		size: { height: "460px", width: "100%" },
 		primaryYAxis: { title: { text: "Amount" } },
-		legend: { visible: true }
+		legend: { visible: true },
+        load: function () {
+                var PivotChart = (<any>window).themeStyle + (<any>window).themeColor + (<any>window).themeVarient;
+                PivotChart = PivotChart.toString();
+                if (PivotChart.indexOf("dark") > -1 || PivotChart.indexOf("contrast") > -1)
+                    PivotChart = "flatdark";
+                else
+                    PivotChart = "flatlight";
+                this.model.theme = PivotChart;
+            },
         });
     });
 }
@@ -1141,7 +1232,7 @@ module PivotGaugeOlap {
     $(function () {
         var sample = new ej.PivotGauge($("#PivotGauge"),{
             dataSource: {
-				data: "http://bi.syncfusion.com/olap/msmdpump.dll",
+				data: "//bi.syncfusion.com/olap/msmdpump.dll",
 				catalog: "Adventure Works DW 2008 SE",
 				cube: "Adventure Works",
 				rows: [
@@ -1369,7 +1460,7 @@ module PivotGridOlap {
     $(function () {
         var sample = new ej.PivotGrid($("#PivotGrid"),{
             dataSource: {
-			data: "http://bi.syncfusion.com/olap/msmdpump.dll",
+			data: "//bi.syncfusion.com/olap/msmdpump.dll",
 			catalog: "Adventure Works DW 2008 SE",
 			cube: "Adventure Works",
 			rows: [
@@ -1467,7 +1558,6 @@ module PivotGridRelational {
         pivotTableFieldListID:"PivotSchemaDesigner"
         });
        $("#PivotSchemaDesigner").ejPivotSchemaDesigner();
-
     });
 }
 
@@ -1477,7 +1567,7 @@ module PivotTreeMap {
     $(function () {
         var sample = new ej.PivotTreeMap($("#PivotTreeMap"),{
             dataSource: {
-			data: "http://bi.syncfusion.com/olap/msmdpump.dll;Locale Identifier=1033;",
+			data: "//bi.syncfusion.com/olap/msmdpump.dll;Locale Identifier=1033;",
 			catalog: "Adventure Works DW 2008 SE",
 			cube: "Adventure Works",
 			rows: [
@@ -1570,7 +1660,6 @@ module RadialMenuComponent {
     });
 }
 
-
 function bold(e: any) {
 
     rteObj = rteEle.data("ejRTE");
@@ -1608,11 +1697,10 @@ function redo(e: any) {
 
 
 
-
 module RadialSliderComponent {
     $(function () {
         var radialsliderInstance = new ej.RadialSlider($("#radialSlider"), {
-           innerCircleImageUrl: "../images/radialslider/chevron-right.png"
+           innerCircleImageUrl: "images/radialslider/chevron-right.png"
         });
     });
 }
@@ -1640,6 +1728,66 @@ module rangecomponent {
                         fill: '#69D2E7'
                     }
                 ];
+            },
+            loaded: function () {
+                var sender = $("#RangeNavigator").data("ejRangeNavigator");
+                var theme = (<any>window).themeStyle + (<any>window).themeColor + (<any>window).themeVarient;
+                if (theme) {
+                    switch (theme) {
+                        case "flatazurelight":
+                            theme = "azurelight";
+                            break;
+                        case "flatlimelight":
+                            theme = "limelight";
+                            break;
+                        case "flatsaffronlight":
+                            theme = "saffronlight";
+                            break;
+                        case "gradientazurelight":
+                            theme = "gradientazure";
+                            break;
+                        case "gradientlimelight":
+                            theme = "gradientlime";
+                            break;
+                        case "gradientsaffronlight":
+                            theme = "gradientsaffron";
+                            break;
+                        case "flatazuredark":
+                            theme = "azuredark";
+                            break;
+                        case "flatlimedark":
+                            theme = "limedark";
+                            break;
+                        case "flatsaffrondark":
+                            theme = "saffrondark";
+                            break;
+                        case "gradientazuredark":
+                            theme = "gradientazuredark";
+                            break;
+                        case "gradientlimedark":
+                            theme = "gradientlimedark";
+                            break;
+                        case "gradientsaffrondark":
+                            theme = "gradientsaffrondark";
+                            break;
+                        case "flathigh-contrast-01dark":
+                            theme = "highcontrast01";
+                            break;
+                        case "flathigh-contrast-02dark":
+                            theme = "highcontrast02";
+                            break;
+                        case "flatmateriallight":
+                            theme = "material";
+                            break;
+                        case "flatoffice-365light":
+                            theme = "office";
+                            break;
+                        default:
+                            theme = "flatlight";
+                            break;
+                    }
+                    sender.model.theme = theme;
+                }
             }
 
         });
@@ -1725,18 +1873,16 @@ module RatingComponent {
             showTooltip: true
         });
     });
-
 }
 
 
 
 module ReportViewerComponent {
 	$(function () {
-		var report = new ej.ReportViewer($("#territoryReportViewer"), {
+        var report = new ej.ReportViewer($("#DefaultReportViewer"), {
 			reportServiceUrl: (<any>window).baseurl + 'api/ReportViewer',
-			reportServerUrl: 'http://mvc.syncfusion.com/reportserver',
 			processingMode: ej.ReportViewer.ProcessingMode.Remote,
-			reportPath: "/SSRSSamples2/Territory Sales new",
+            reportPath: "ConditionalFormating.rdl",
 			isResponsive: true
 		});
 	});
@@ -1768,7 +1914,8 @@ module RibbonComponent {
                             buttonSettings: {
                                 contentType: ej.ContentType.ImageOnly,
                                 imagePosition: ej.ImagePosition.ImageTop,
-                                prefixIcon: "e-icon e-ribbon e-new"
+                                prefixIcon: "e-icon e-ribbon e-new",
+                                click: "onClick"
                             }
                         }
                         ],
@@ -1790,6 +1937,7 @@ module RibbonComponent {
                                     prefixIcon: "e-icon e-ribbon e-ribbonpaste",
                                     targetID: "pasteSplit",
                                     buttonMode: "dropdown",
+                                    click: "onClick",
                                     arrowPosition: ej.ArrowPosition.Bottom
                                 }
                             }
@@ -1807,6 +1955,7 @@ module RibbonComponent {
                                     toolTip: "Cut",
                                     buttonSettings: {
                                         contentType: ej.ContentType.TextAndImage,
+                                        click: "onClick",
                                         prefixIcon: "e-icon e-ribbon e-ribboncut"
                                     }
                                 },
@@ -1816,6 +1965,7 @@ module RibbonComponent {
                                         toolTip: "Copy",
                                         buttonSettings: {
                                             contentType: ej.ContentType.TextAndImage,
+                                            click: "onClick",
                                             prefixIcon: "e-icon e-ribbon e-ribboncopy"
                                         }
                                     },
@@ -1825,6 +1975,7 @@ module RibbonComponent {
                                         toolTip: "Clear All",
                                         buttonSettings: {
                                             contentType: ej.ContentType.TextAndImage,
+                                            click: "onClick",
                                             prefixIcon: "e-icon e-ribbon clearAll"
                                         }
                                     }],
@@ -1843,6 +1994,7 @@ module RibbonComponent {
                                 dropdownSettings: {
                                     dataSource: fontfamily,
                                     text: "Segoe UI",
+                                    select: "onClick",
                                     width: 150
                                 }
                             },
@@ -1852,6 +2004,7 @@ module RibbonComponent {
                                     dropdownSettings: {
                                         dataSource: fontsize,
                                         text: "1pt",
+                                        select: "onClick",
                                         width: 65
                                     }
                                 }],
@@ -1869,6 +2022,7 @@ module RibbonComponent {
                                         contentType: ej.ContentType.ImageOnly,
                                         defaultText: "Bold",
                                         activeText: "Bold",
+                                        click: "onClick",
                                         defaultPrefixIcon: "e-icon e-ribbon bold",
                                         activePrefixIcon: "e-icon e-ribbon bold"
                                     }
@@ -1881,6 +2035,7 @@ module RibbonComponent {
                                             contentType: ej.ContentType.ImageOnly,
                                             defaultText: "Italic",
                                             activeText: "Italic",
+                                            click: "onClick",
                                             defaultPrefixIcon: "e-icon e-ribbon e-ribbonitalic",
                                             activePrefixIcon: "e-icon e-ribbon e-ribbonitalic"
                                         }
@@ -1894,6 +2049,7 @@ module RibbonComponent {
                                             contentType: ej.ContentType.ImageOnly,
                                             defaultText: "Underline",
                                             activeText: "Underline",
+                                            click: "onClick",
                                             defaultPrefixIcon: "e-icon e-ribbon e-ribbonunderline",
                                             activePrefixIcon: "e-icon e-ribbon e-ribbonunderline"
                                         }
@@ -1907,6 +2063,7 @@ module RibbonComponent {
                                             contentType: ej.ContentType.ImageOnly,
                                             defaultText: "Strikethrough",
                                             activeText: "Strikethrough",
+                                            click: "onClick",
                                             defaultPrefixIcon: "e-icon e-ribbon strikethrough",
                                             activePrefixIcon: "e-icon e-ribbon strikethrough"
                                         }
@@ -1916,6 +2073,7 @@ module RibbonComponent {
                                         text: "superscript",
                                         toolTip: "Superscript",
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.ImageOnly,
                                             prefixIcon: "e-icon e-ribbon e-superscripticon"
                                         }
@@ -1926,6 +2084,7 @@ module RibbonComponent {
                                         toolTip: "Subscript",
                                         enableSeparator: true,
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.ImageOnly,
                                             prefixIcon: "e-icon e-ribbon e-subscripticon"
                                         }
@@ -1958,6 +2117,7 @@ module RibbonComponent {
                                     text: "Bullet Format",
                                     toolTip: "Bullets",
                                     buttonSettings: {
+                                        click: "onClick",
                                         contentType: ej.ContentType.ImageOnly,
                                         prefixIcon: "e-icon e-ribbon e-bullet"
                                     }
@@ -1968,6 +2128,7 @@ module RibbonComponent {
                                         toolTip: "Numbering",
                                         enableSeparator: true,
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.ImageOnly,
                                             prefixIcon: "e-icon e-ribbon e-numbericon"
                                         }
@@ -1977,6 +2138,7 @@ module RibbonComponent {
                                         text: "Indent",
                                         toolTip: "Text Indent",
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.ImageOnly,
                                             prefixIcon: "e-icon e-ribbon e-indent"
                                         }
@@ -1987,6 +2149,7 @@ module RibbonComponent {
                                         toolTip: "Text Outdent",
                                         enableSeparator: true,
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.ImageOnly,
                                             prefixIcon: "e-icon e-ribbon e-outdent"
                                         }
@@ -1997,6 +2160,7 @@ module RibbonComponent {
                                         toolTip: "Sort",
                                         enableSeparator: true,
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.ImageOnly,
                                             prefixIcon: "e-icon e-ribbon e-sort"
                                         }
@@ -2006,6 +2170,7 @@ module RibbonComponent {
                                         text: "Border",
                                         toolTip: "Border",
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.ImageOnly,
                                             prefixIcon: "e-icon e-ribbon e-border"
                                         }
@@ -2021,6 +2186,7 @@ module RibbonComponent {
                                     text: "JustifyLeft",
                                     toolTip: "Align Left",
                                     buttonSettings: {
+                                        click: "onClick",
                                         contentType: ej.ContentType.ImageOnly,
                                         prefixIcon: "e-icon e-ribbon alignleft"
                                     }
@@ -2030,6 +2196,7 @@ module RibbonComponent {
                                         text: "JustifyCenter",
                                         toolTip: "Align Center",
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.ImageOnly,
                                             prefixIcon: "e-icon e-ribbon aligncenter"
                                         }
@@ -2039,6 +2206,7 @@ module RibbonComponent {
                                         text: "JustifyRight",
                                         toolTip: "Align Right",
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.ImageOnly,
                                             prefixIcon: "e-icon e-ribbon alignright"
                                         }
@@ -2049,6 +2217,7 @@ module RibbonComponent {
                                         toolTip: "Justify",
                                         enableSeparator: true,
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.ImageOnly,
                                             prefixIcon: "e-icon e-ribbon justify"
                                         }
@@ -2058,6 +2227,7 @@ module RibbonComponent {
                                         text: "Upper Case",
                                         toolTip: "Upper Case",
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.ImageOnly,
                                             prefixIcon: "e-icon e-ribbon e-uppercase"
                                         }
@@ -2067,6 +2237,7 @@ module RibbonComponent {
                                         text: "Lower Case",
                                         toolTip: "Lower Case",
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.ImageOnly,
                                             prefixIcon: "e-icon e-ribbon e-lowercase"
                                         }
@@ -2084,6 +2255,7 @@ module RibbonComponent {
                                 text: "Undo",
                                 toolTip: "Undo",
                                 buttonSettings: {
+                                    click: "onClick",
                                     contentType: ej.ContentType.TextAndImage,
                                     imagePosition: ej.ImagePosition.ImageTop,
                                     prefixIcon: "e-icon e-ribbon e-undo"
@@ -2094,6 +2266,7 @@ module RibbonComponent {
                                     text: "Redo",
                                     toolTip: "Redo",
                                     buttonSettings: {
+                                        click: "onClick",
                                         contentType: ej.ContentType.TextAndImage,
                                         imagePosition: ej.ImagePosition.ImageTop,
                                         prefixIcon: "e-icon e-ribbon e-redo"
@@ -2115,6 +2288,7 @@ module RibbonComponent {
                                 toolTip: "Zoom In",
                                 buttonSettings: {
                                     width: 58,
+                                    click: "onClick",
                                     contentType: ej.ContentType.TextAndImage,
                                     imagePosition: ej.ImagePosition.ImageTop,
                                     prefixIcon: "e-icon e-ribbon e-zoomin"
@@ -2126,6 +2300,7 @@ module RibbonComponent {
                                     toolTip: "Zoom Out",
                                     buttonSettings: {
                                         width: 70,
+                                        click: "onClick",
                                         contentType: ej.ContentType.TextAndImage,
                                         imagePosition: ej.ImagePosition.ImageTop,
                                         prefixIcon: "e-icon e-ribbon e-zoomout"
@@ -2137,6 +2312,7 @@ module RibbonComponent {
                                     toolTip: "Full Screen",
                                     buttonSettings: {
                                         width: 73,
+                                        click: "onClick",
                                         contentType: ej.ContentType.TextAndImage,
                                         imagePosition: ej.ImagePosition.ImageTop,
                                         prefixIcon: "e-icon e-ribbon e-fullscreen"
@@ -2157,6 +2333,7 @@ module RibbonComponent {
                                 text: "Tables",
                                 toolTip: "Tables",
                                 buttonSettings: {
+                                    click: "onClick",
                                     contentType: ej.ContentType.TextAndImage,
                                     imagePosition: ej.ImagePosition.ImageTop,
                                     prefixIcon: "e-icon e-ribbon e-table"
@@ -2177,6 +2354,7 @@ module RibbonComponent {
                                     text: "Pictures",
                                     toolTip: "Pictures",
                                     buttonSettings: {
+                                        click: "onClick",
                                         contentType: ej.ContentType.TextAndImage,
                                         imagePosition: ej.ImagePosition.ImageTop,
                                         prefixIcon: "e-icon e-ribbon e-picture"
@@ -2187,6 +2365,7 @@ module RibbonComponent {
                                         text: "Videos",
                                         toolTip: "Videos",
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.TextAndImage,
                                             imagePosition: ej.ImagePosition.ImageTop,
                                             prefixIcon: "e-icon e-ribbon e-video"
@@ -2197,6 +2376,7 @@ module RibbonComponent {
                                         text: "Shapes",
                                         toolTip: "Shapes",
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.TextAndImage,
                                             imagePosition: ej.ImagePosition.ImageTop,
                                             prefixIcon: "e-icon e-ribbon e-shape"
@@ -2207,6 +2387,7 @@ module RibbonComponent {
                                         text: "Charts",
                                         toolTip: "Charts",
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.TextAndImage,
                                             imagePosition: ej.ImagePosition.ImageTop,
                                             prefixIcon: "e-icon e-ribbon e-chart"
@@ -2227,6 +2408,7 @@ module RibbonComponent {
                                     text: "Comments",
                                     toolTip: "Comments",
                                     buttonSettings: {
+                                        click: "onClick",
                                         contentType: ej.ContentType.TextAndImage,
                                         imagePosition: ej.ImagePosition.ImageTop,
                                         prefixIcon: "e-icon e-ribbon e-comment"
@@ -2247,6 +2429,7 @@ module RibbonComponent {
                                     text: "Text",
                                     toolTip: "Text",
                                     buttonSettings: {
+                                        click: "onClick",
                                         contentType: ej.ContentType.TextAndImage,
                                         imagePosition: ej.ImagePosition.ImageTop,
                                         prefixIcon: "e-icon e-ribbon e-text",
@@ -2258,6 +2441,7 @@ module RibbonComponent {
                                         text: "Date Time",
                                         toolTip: "DateTime",
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.TextAndImage,
                                             imagePosition: ej.ImagePosition.ImageTop,
                                             prefixIcon: "e-icon e-ribbon e-datetimenew"
@@ -2278,6 +2462,7 @@ module RibbonComponent {
                                     text: "Hyperlink",
                                     toolTip: "Hyperlink",
                                     buttonSettings: {
+                                        click: "onClick",
                                         contentType: ej.ContentType.TextAndImage,
                                         imagePosition: ej.ImagePosition.ImageTop,
                                         prefixIcon: "e-icon e-ribbon e-hyperlink"
@@ -2298,6 +2483,7 @@ module RibbonComponent {
                                     text: "Equation",
                                     toolTip: "Equation",
                                     buttonSettings: {
+                                        click: "onClick",
                                         contentType: ej.ContentType.TextAndImage,
                                         imagePosition: ej.ImagePosition.ImageTop,
                                         prefixIcon: "e-icon e-ribbon e-equation"
@@ -2318,6 +2504,7 @@ module RibbonComponent {
                                     text: "Print Layout",
                                     toolTip: "Print Layout",
                                     buttonSettings: {
+                                        click: "onClick",
                                         contentType: ej.ContentType.TextAndImage,
                                         imagePosition: ej.ImagePosition.ImageTop,
                                         prefixIcon: "e-icon e-ribbon e-printlayout"
@@ -2338,6 +2525,7 @@ module RibbonComponent {
                                     text: "Print",
                                     toolTip: "Print",
                                     buttonSettings: {
+                                        click: "onClick",
                                         contentType: ej.ContentType.TextAndImage,
                                         imagePosition: ej.ImagePosition.ImageTop,
                                         prefixIcon: "e-icon e-ribbon e-print"
@@ -2348,6 +2536,7 @@ module RibbonComponent {
                                         text: "Save",
                                         toolTip: "Save",
                                         buttonSettings: {
+                                            click: "onClick",
                                             contentType: ej.ContentType.TextAndImage,
                                             imagePosition: ej.ImagePosition.ImageTop,
                                             prefixIcon: "e-icon e-ribbon e-save"
@@ -2375,9 +2564,20 @@ module RibbonComponent {
 function colorHandler(args:any) {
     (this._id.indexOf("fillcolor") != -1) ? $("#contenteditor").css('background-color', args.value) : document.execCommand('forecolor', false, args.value);
 }
-
-
-
+function onClick(args:any) {
+    let val:any, prop = args.text;
+    val = (ej.isNullOrUndefined(args.model.text)) ? args.model.activeText : args.model.text;
+    if (action1.indexOf(val) != -1)
+        $("#contenteditor").empty();
+    else if (action2.indexOf(val) != -1)
+        document.execCommand(val, false, null);
+    else if (fontfamily.indexOf(prop) != -1)
+        document.execCommand("FontName", false, prop);
+    else if (fontsize.indexOf(prop) != -1)
+        document.execCommand("FontSize", false, prop.replace("pt", ""));
+    else
+        $("#contenteditor").append("<p> Action: " + val + " Triggered </p>");
+}
 
 
 
@@ -2481,7 +2681,7 @@ module ScheduleComponent {
         var sample = new ej.Schedule($("#Schedule1"), {
             width: "100%",
             height: "525px",
-            currentDate: new Date(2014, 4, 5),
+            currentDate: new Date(2017, 5, 5),
             timeScale: {
                 minorSlotCount: 4,
                 majorSlot: 60
@@ -2529,7 +2729,7 @@ module ScheduleComponent {
                 }
             }],
             appointmentSettings: {
-                dataSource: new ej.DataManager((<any>window).Default).executeLocal(new ej.Query().take(10)),
+                dataSource: new ej.DataManager((<any>window).ResourcesData).executeLocal(new ej.Query().take(10)),
                 id: "Id",
                 subject: "Subject",
                 startTime: "StartTime",
@@ -2554,7 +2754,9 @@ module ScrollerComponent {
         });
         $(window).bind('resize', function () {
             scrollerSample.refresh();
-        });    });
+        });
+
+    });
 }
 
 
@@ -2576,16 +2778,12 @@ module SliderComponent {
     $(function () {
         var slider = new ej.Slider($("#minSlider"), {
             sliderType: "MinRange",
-            height: "16px",
-            width: "300px",
             value: 60,
             minValue: 0,
             maxValue: 100
         });
         var rangeslider = new ej.Slider($("#rangeSlider"), {
             sliderType: "Range",
-            height: "16px",
-            width: "300px",
             values: [30, 60],
             minValue: 0
         });
@@ -2728,8 +2926,6 @@ module piesparkline4 {
 
 
 
-
-
 module SplitterComponent {
     $(function () {
         var splitterInstance = new ej.Splitter($("#outterSpliter"), {
@@ -2773,7 +2969,6 @@ $(function () {
         });
     });
 }
-
 
 
 
@@ -2830,13 +3025,22 @@ module sunburstcomponent {
 			enableAnimation:false,
 			size:{height:"600"},
 			innerRadius:0.2,
+            load: function () {
+                var sender = $("#Sunburst").data("ejSunburstChart");
+                var SunBurstTheme = (<any>window).themeStyle + (<any>window).themeColor + (<any>window).themeVarient;
+                SunBurstTheme = SunBurstTheme.toString();
+                if (SunBurstTheme.indexOf("dark") > -1 || SunBurstTheme.indexOf("contrast") > -1)
+                    SunBurstTheme = "flatdark";
+                else
+                    SunBurstTheme = "flatlight";
+                sender.model.theme = SunBurstTheme;
+            },
 			title:{text:"Employees Count"},
 			zoomSettings:{enable:false},
-			legend:{visible:true,position:'top'}
+			legend:{visible:true,position:'top'},
         });
     });
 }
-
 
 
 
@@ -2856,7 +3060,6 @@ module TabComponent {
 
 
 module TagCloudComponent {
-
 
     var websiteCollection = [
         { text: "Google", url: "http://www.google.com", frequency: 12 },
@@ -2888,10 +3091,8 @@ module TagCloudComponent {
                 text: "text", url: "url", frequency: "frequency"
             }
         });
-
     });
 }
-
 
 
 module EditorComponent {
@@ -2928,8 +3129,6 @@ module EditorComponent {
 
 
 
-
-
 module TileViewComponent {
     $(function () {
         var tile1 = new ej.Tile($("#tile1"), {
@@ -2942,7 +3141,6 @@ module TileViewComponent {
             imagePosition:"center",
 			tileSize:"small",
 			imageUrl:'content/images/tile/windows/alerts.png',
-
         });
 		var tile3 = new ej.Tile($("#tile3"), {
             imagePosition:"center",
@@ -3022,26 +3220,21 @@ module TimePickerComponent {
 
 
 module ToolbarComponent {
-
     $(function () {
         var sample = new ej.Toolbar($("#editingToolbar"),{
             width: "100%",
             cssClass: "gradient-lime",
             enableSeparator: true,
-            height: 30,
             isResponsive: true,
             orientation: ej.Orientation.Horizontal,
             showRoundedCorner: true
         });
     });
-
 }
 
 
 
-
 module TooltipComponent {
-
     $(function () {
 
         var sample1 = new ej.Tooltip($("#link1"),{
@@ -3140,7 +3333,6 @@ module TreeGridComponent {
 
 
 
-
 var population_data: Array<Object> = [
     { Continent: "Asia", Country: "Indonesia", Growth: 3, Population: 237641326 },
     { Continent: "Asia", Country: "Russia", Growth: 2, Population: 152518015 },
@@ -3181,8 +3373,6 @@ module treemapcomponent {
 
 
 
-
-
 module TreeViewComponent {
     $(function () {
         var tree = new ej.TreeView($("#treeView"), {
@@ -3196,13 +3386,12 @@ module TreeViewComponent {
 
 
 
-
 module UploadboxComponent {
 
     $(function () {
         var sample = new ej.Uploadbox($("#UploadDefault"),{
-            saveUrl: "uploadbox/saveFiles.ashx",
-            removeUrl: "uploadbox/removeFiles.ashx",
+            saveUrl: (<any>window).baseurl + "api/uploadbox/Save",
+            removeUrl: (<any>window).baseurl + "api/uploadbox/Remove",
             buttonText: {
                 browse: "Choose File", upload: "Upload", cancel: "Cancel"
             },
@@ -3217,7 +3406,6 @@ module UploadboxComponent {
     });
 
 }
-
 
 
 

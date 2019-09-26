@@ -1,6 +1,13 @@
 import * as React from 'react';
+import { ReactWidgetsCommonProps, AutoFocus } from './CommonProps';
 
-interface CalendarProps extends React.Props<CalendarClass>{
+type CalendarView = 'month' | 'year' | 'decade' | 'century';
+
+interface CalendarProps extends ReactWidgetsCommonProps<CalendarClass>, AutoFocus {
+    /**
+     * Set the culture of the Calendar, passed to the configured localizer.
+     */
+    culture?: string;
     /**
      * The current selected date, should be a Date object or null.
      */
@@ -15,10 +22,18 @@ interface CalendarProps extends React.Props<CalendarClass>{
      */
     onChange?: (date?: Date) => void;
     /**
+     * The native onKeyDown event, called preventDefault will prevent any custom behavior, included keyboard shortcuts.
+     */
+    onKeyDown?: (event: KeyboardEvent) => void;
+    /**
      * Callback fired when the Calendar navigates between views, or forward and backwards in
      * time.
      */
-    onNavigate?: (date: Date, direction: string, view: string ) => void;
+    onNavigate?: (date: Date, direction: string, view: string) => void;
+    /**
+     * A callback fired when the view changes.
+     */
+    onViewChange?: () => void;
     /**
      * The minimum date that the Calendar can navigate from.
      */
@@ -53,13 +68,11 @@ interface CalendarProps extends React.Props<CalendarClass>{
     dayComponent?: React.ReactType;
     /**
      * The starting and lowest level view the calendar can navigate down to.
-     * @enum "month" "year" "decade" "century"
      */
     initialView?: "month" | "year" | "decade" | "century";
     /**
      * The highest level view the calendar can navigate up to. This value should be higher than
      * initialView
-     * @enum "month" "year" "decade" "century"
      */
     finalView?: "month" | "year" | "decade" | "century";
     /**
@@ -97,13 +110,19 @@ interface CalendarProps extends React.Props<CalendarClass>{
      * 1900 - 1999.
      */
     centuryFormat?: string | ((day: Date) => string);
-    /**
-     * Mark whether the widget should render right-to-left. This property can also be implicitly
-     * passed to the widget through a childContext prop (isRtl) this allows higher level
-     * application components to specify the direction.
-     */
-    isRtl?: boolean;
     messages?: CalendarMessages;
+    /**
+     * Set a unique starting view
+     */
+    defaultView?: CalendarView;
+    /**
+     * Controls the currently displayed calendar view. Use defaultView to set a unique starting view.
+     */
+    view?: CalendarView;
+    /**
+     * Defines a list of views the Calendar can traverse through, starting with the first in the list to the last.
+     */
+    views?: CalendarView[];
 }
 
 interface CalendarMessages {

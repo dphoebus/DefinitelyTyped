@@ -1,5 +1,5 @@
 // Type definitions for doT 1.1
-// Project: https://github.com/olado/doT
+// Project: http://github.com/olado/dot
 // Definitions by: ZombieHunter <https://github.com/ZombieHunter>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
@@ -8,10 +8,10 @@ export as namespace doT;
 /** Version number */
 export const version: string;
 
-/** Default template settings */
-export const templateSettings: TemplateSettings;
+/** Template settings */
+export let templateSettings: TemplateSettings;
 
-type RenderFunction = (...args: any[]) => string;
+export type RenderFunction = (...args: any[]) => string;
 
 /** Compile template */
 export function template(tmpl: string, c?: TemplateSettings, def?: {}): RenderFunction;
@@ -19,7 +19,7 @@ export function template(tmpl: string, c?: TemplateSettings, def?: {}): RenderFu
 /** For express */
 export function compile(tmpl: string, def?: {}): RenderFunction;
 
-interface TemplateSettings {
+export interface TemplateSettings {
 	evaluate: RegExp;
 	interpolate: RegExp;
 	encode: RegExp;

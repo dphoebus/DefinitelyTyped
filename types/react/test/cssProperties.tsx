@@ -3,6 +3,9 @@ import * as React from 'react';
 const initialStyle: React.CSSProperties = { fontWeight: 'initial' };
 const initialStyleTest = <div style={initialStyle} />;
 
+const borderRadiusStyle: React.CSSProperties = { borderRadius: 5, borderTopRightRadius: '20%' };
+const borderRadiusStyleTest = <div style={borderRadiusStyle} />;
+
 const backgroundAttachmentStyle: React.CSSProperties = { backgroundAttachment: 'fixed' };
 const backgroundAttachmentStyleTest = <div style={backgroundAttachmentStyle} />;
 
@@ -26,6 +29,12 @@ const justifyContentStyleTest = <div style={justifyContentStyle} />;
 
 const boxShadowStyle: React.CSSProperties = { boxShadow: '2px 2px 2px 1px rgba(0, 0, 0, 0.2)' };
 const boxShadowStyleTest = <div style={boxShadowStyle} />;
+
+const overflowStyle: React.CSSProperties = { overflow: 'auto', overflowX: 'visible', overflowY: 'scroll' };
+const overflowStyleTest = <div style={overflowStyle} />;
+
+const positionStyle: React.CSSProperties = { position: 'relative' };
+const positionStyleTest = <div style={positionStyle} />;
 
 // SVG specific style attribute declarations
 

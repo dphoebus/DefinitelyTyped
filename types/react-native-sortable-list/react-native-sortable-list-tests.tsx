@@ -8,10 +8,11 @@ import {
     Image,
     View,
     Dimensions,
-    FlexJustifyType,
-    FlexAlignType
+    ViewStyle,
+    TextStyle,
+    ImageStyle,
 } from 'react-native';
-import SortableList, {RowProps} from 'react-native-sortable-list';
+import SortableList, { RowProps } from 'react-native-sortable-list';
 
 const window = Dimensions.get('window');
 
@@ -61,21 +62,18 @@ const data = {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center" as FlexJustifyType,
-        alignItems: "center" as FlexAlignType,
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: '#eee',
         paddingTop: 60,
     },
-
     list: {
         flex: 1,
     },
-
     contentContainer: {
         width: window.width,
         paddingHorizontal: 30,
     },
-
     row: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -90,21 +88,18 @@ const styles = StyleSheet.create({
         shadowOffset: {height: 2, width: 2},
         shadowRadius: 2,
     },
-
     image: {
         width: 60,
         height: 60,
         marginRight: 30,
         borderRadius: 30,
     },
-
     text: {
         fontSize: 24,
     },
-
 });
 
-class Basic extends React.Component<void, void> {
+class Basic extends React.Component {
     render() {
         return (
             <View style={styles.container}>
@@ -118,19 +113,18 @@ class Basic extends React.Component<void, void> {
     }
 
     _renderRow = ({data, active}: RowProps) => {
-        return <Row data={data} active={active}/>
+        return <Row data={data} active={active}/>;
     }
 }
 
 interface RowState {
     style: {
         shadowRadius: Animated.Value
-        transform: {scale: Animated.Value}[]
-    }
+        transform: Array<{scale: Animated.Value}>
+    };
 }
 
 class Row extends React.Component<RowProps, RowState> {
-
     state = {
         style: {
             shadowRadius: new Animated.Value(2),
@@ -165,7 +159,7 @@ class Row extends React.Component<RowProps, RowState> {
                 toValue: 10
             }),
         ]).start();
-    };
+    }
 
     startDeactivationAnimation = () => {
         const {style} = this.state;
@@ -182,7 +176,7 @@ class Row extends React.Component<RowProps, RowState> {
                 toValue: 2
             }),
         ]).start();
-    };
+    }
 
     render() {
         const {data} = this.props;
@@ -198,6 +192,5 @@ class Row extends React.Component<RowProps, RowState> {
         );
     }
 }
-
 
 AppRegistry.registerComponent('Basic', () => Basic);

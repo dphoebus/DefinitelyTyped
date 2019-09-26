@@ -24,6 +24,11 @@ myScroll1.scrollTo(0, 100);
 myScroll1.scrollTo(0, 100, 200);
 myScroll1.scrollTo(0, 100, 200, true);
 
+myScroll1.zoom(1);
+myScroll1.zoom(-1);
+myScroll1.zoom(1, 100, 200);
+myScroll1.zoom(1, 200, 250, 100);
+
 myScroll1.scrollToElement('selectedElement');
 myScroll1.scrollToElement('selectedElement', 250);
 
@@ -39,3 +44,5 @@ var myScroll12 = new IScroll(document.getElementById('wrapper'), { preventDefaul
 
 var myScroll13 = new IScroll(document.getElementById('wrapper'), { bounceEasing: 'circular' });
 var myScroll14 = new IScroll(document.getElementById('wrapper'), { bounceEasing: { style: 'cubic-bezier(0,0,1,1)', fn: function (k) { return k; } } });
+
+var myScroll15 = new IScroll('#wrapper', { disableMouse: true, disablePointer: true });

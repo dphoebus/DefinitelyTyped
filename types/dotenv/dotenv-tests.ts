@@ -1,26 +1,18 @@
-import dotenv = require('dotenv');
+import dotenv = require("dotenv");
 
-// typically, result will be an Object
-const env = dotenv.config({
-    silent: true
-});
-const dbUrl: string | null = !env ? null : env['DATABASE_URL'];
-
-// ... but it might also be `false`
-const result = dotenv.config({
-    path: '.non-existing-env'
-});
+const env = dotenv.config();
+const dbUrl: string | null = env.error || !env.parsed ? null : env.parsed["BASIC"];
 
 dotenv.config({
-    path: '.env'
+  path: ".env-example",
+  encoding: "utf8",
+  debug: true
 });
 
-dotenv.config({
-    encoding: 'utf8'
+const parsed = dotenv.parse("NODE_ENV=production\nDB_HOST=a.b.c");
+const dbHost: string = parsed["DB_HOST"];
+
+const parsedFromBuffer = dotenv.parse(new Buffer("JUSTICE=league\n"), {
+  debug: true
 });
-
-const parsed = dotenv.parse("ENVIRONMENT=production\nDEBUG=no\n");
-const debug: string = parsed['DEBUG'];
-
-const parsedFromBuffer = dotenv.parse(new Buffer("JUSTICE=league\n"));
-const justice: string = parsedFromBuffer['JUSTICE'];
+const justice: string = parsedFromBuffer["JUSTICE"];

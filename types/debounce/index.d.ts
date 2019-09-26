@@ -1,10 +1,15 @@
-// Type definitions for compose-function
+// Type definitions for debounce 1.2
 // Project: https://github.com/component/debounce
 // Definitions by: Denis Sokolov <https://github.com/denis-sokolov>
+//                 Josh Goldberg <https://github.com/joshuakgoldberg>
+//                 Wayne Carson <https://github.com/wcarson>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
+declare namespace _debounce {
+    const debounce: typeof _debounce;
+}
 
-// Overload on boolean constants would allow us to narrow further,
-// but it is not implemented for TypeScript yet
-declare function f<A extends Function>(f: A, interval?: number, immediate?: boolean): A
-export default f;
+declare function _debounce<A extends Function>(f: A, interval?: number, immediate?: boolean): A & { clear(): void; }
+    & { flush(): void };
+
+export = _debounce;

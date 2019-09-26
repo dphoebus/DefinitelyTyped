@@ -1,4 +1,7 @@
-var map = L.map('map', {
+import * as L from 'leaflet';
+import 'leaflet.locatecontrol';
+
+const map = L.map('map', {
     center: [51.505, -0.09],
     zoom: 13
 });
@@ -7,7 +10,7 @@ var map = L.map('map', {
 L.control.locate().addTo(map);
 
 // Simple
-var lc = L.control.locate({
+const lc = L.control.locate({
     position: 'topright',
     strings: {
         title: "Show me where I am, yo!"

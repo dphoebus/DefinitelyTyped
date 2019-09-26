@@ -1,6 +1,10 @@
-// Type definitions for tape v4.2.2
+// Type definitions for tape v4.2.30
 // Project: https://github.com/substack/tape
-// Definitions by: Bart van der Schoor <https://github.com/Bartvds>, Haoqun Jiang <https://github.com/sodatea>
+// Definitions by: Bart van der Schoor <https://github.com/Bartvds>
+//                 Haoqun Jiang <https://github.com/sodatea>
+//                 Dennis Schwartz <https://github.com/DennisSchwartz>
+//                 Michael Henretty <https://github.com/mikehenrty>
+//                 Rafał Ostrowski <https://github.com/rostrowski>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 /// <reference types="node" />
@@ -43,11 +47,22 @@ declare namespace tape {
      * Generate a new test that will be skipped over.
      */
     export function skip(name: string, cb: tape.TestCase): void;
+    export function skip(name: string, opts: tape.TestOptions, cb: tape.TestCase): void;
+    export function skip(cb: tape.TestCase): void;
+    export function skip(opts: tape.TestOptions, cb: tape.TestCase): void;
 
     /**
-     * Like test(name, cb) except if you use .only this is the only test case that will run for the entire process, all other test cases using tape will be ignored.
+     * The onFinish hook will get invoked when ALL tape tests have finished right before tape is about to print the test summary.
+     */
+    export function onFinish(cb: () => void): void;
+
+    /**
+     * Like test(name?, opts?, cb) except if you use .only this is the only test case that will run for the entire process, all other test cases using tape will be ignored.
      */
     export function only(name: string, cb: tape.TestCase): void;
+    export function only(name: string, opts: tape.TestOptions, cb: tape.TestCase): void;
+    export function only(cb: tape.TestCase): void;
+    export function only(opts: tape.TestOptions, cb: tape.TestCase): void;
 
     /**
      * Create a new test harness instance, which is a function like test(), but with a new pending stack and test state.
@@ -66,6 +81,7 @@ declare namespace tape {
          * Additional tests queued up after t will not be run until all subtests finish.
          */
         test(name: string, cb: tape.TestCase): void;
+        test(name: string, opts: TestOptions, cb: tape.TestCase): void;
 
         /**
          * Declare that n assertions should be run. end() will be called automatically after the nth assertion.
@@ -184,13 +200,13 @@ declare namespace tape {
          * expected, if present, must be a RegExp or Function, which is used to test the exception object.
          */
         throws(fn: () => void, msg?: string): void;
-        throws(fn: () => void, exceptionExpected: RegExp | (() => void), msg?: string): void;
+        throws(fn: () => void, exceptionExpected: RegExp | Function, msg?: string): void;
 
         /**
          * Assert that the function call fn() does not throw an exception.
          */
         doesNotThrow(fn: () => void, msg?: string): void;
-        doesNotThrow(fn: () => void, exceptionExpected: RegExp | (() => void), msg?: string): void;
+        doesNotThrow(fn: () => void, exceptionExpected: RegExp | Function, msg?: string): void;
 
         /**
          * Print a message without breaking the tap output.

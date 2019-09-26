@@ -2,18 +2,25 @@
 
 import * as Producer from "sqs-producer";
 
-var producer = Producer.create({
+const producer = Producer.create({
   queueUrl: 'https://sqs.eu-west-1.amazonaws.com/account-id/queue-name',
   region: 'eu-west-1'
 });
 
+const producer2 = Producer.create({
+  accessKeyId: 'AKIAIOSFODNN7EXAMPLE',
+  queueUrl: 'https://sqs.eu-west-1.amazonaws.com/account-id/queue-name',
+  region: 'eu-west-1',
+  secretAccessKey: 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
+});
+
 // send messages to the queue
-producer.send(['msg1', 'msg2'], function(err) {
+producer.send(['msg1', 'msg2'], err => {
   if (err) console.log(err);
 });
 
 // get the current size of the queue
-producer.queueSize(function (err, size) {
+producer.queueSize((err, size) => {
   if (err) console.log(err);
 
   console.log('There are', size, 'messages on the queue.');
@@ -23,7 +30,7 @@ producer.queueSize(function (err, size) {
 producer.send([{
   id: 'id1',
   body: 'Hello world'
-}], function(err) {
+}], err => {
   if (err) console.log(err);
 });
 
@@ -44,6 +51,6 @@ producer.send([
     body: 'Hello world delayed by 5 seconds',
     delaySeconds: 5
   }
-], function(err) {
+], err => {
   if (err) console.log(err);
 });

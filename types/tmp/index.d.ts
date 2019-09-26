@@ -1,47 +1,70 @@
-// Type definitions for tmp v0.0.28
-// Project: https://www.npmjs.com/package/tmp
+// Type definitions for tmp 0.1
+// Project: http://github.com/raszi/node-tmp
 // Definitions by: Jared Klopper <https://github.com/optical>
+//                 Gyusun Yeom <https://github.com/Perlmint>
+//                 Alan Plum <https://github.com/pluma>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
-
-
-declare namespace tmp {
-    interface Options extends SimpleOptions {
-        mode?: number;
-    }
-
-    interface SimpleOptions {
-        prefix?: string;
-        postfix?: string;
-        template?: string;
-        dir?: string;
-        tries?: number;
-        keep?: boolean;
-        unsafeCleanup?: boolean;
-    }
-
-    interface SynchrounousResult {
-        name: string;
-        fd: number;
-        removeCallback: () => void;
-    }
-
-    function file(callback: (err: any, path: string, fd: number, cleanupCallback: () => void) => void): void;
-    function file(config: Options, callback?: (err: any, path: string, fd: number, cleanupCallback: () => void) => void): void;
-
-    function fileSync(config?: Options): SynchrounousResult;
-
-    function dir(callback: (err: any, path: string, cleanupCallback: () => void) => void): void;
-    function dir(config: Options, callback?: (err: any, path: string, cleanupCallback: () => void) => void): void;
-
-    function dirSync(config?: Options): SynchrounousResult;
-
-    function tmpName(callback: (err: any, path: string) => void): void;
-    function tmpName(config: SimpleOptions, callback?: (err: any, path: string) => void): void;
-
-    function tmpNameSync(config?: SimpleOptions): string;
-
-    function setGracefulCleanup(): void;
+export interface TmpNameOptions {
+    prefix?: string;
+    postfix?: string;
+    template?: string;
+    dir?: string;
+    tries?: number;
 }
 
-export = tmp;
+export interface FileOptions extends TmpNameOptions {
+    mode?: number;
+    keep?: boolean;
+    discardDescriptor?: boolean;
+    detachDescriptor?: boolean;
+}
+
+export interface DirOptions extends TmpNameOptions {
+    mode?: number;
+    keep?: boolean;
+    unsafeCleanup?: boolean;
+}
+
+export interface FileResult {
+    name: string;
+    fd: number;
+    removeCallback: () => void;
+}
+
+export interface DirResult {
+    name: string;
+    removeCallback: () => void;
+}
+
+export type FileCallback = (
+    err: any,
+    name: string,
+    fd: number,
+    removeCallback: () => void
+) => void;
+
+export type DirCallback = (
+    err: any,
+    name: string,
+    removeCallback: () => void
+) => void;
+
+export type TmpNameCallback = (err: any, name: string) => void;
+
+export function file(options: FileOptions, cb: FileCallback): void;
+export function file(cb: FileCallback): void;
+
+export function fileSync(options?: FileOptions): FileResult;
+
+export function dir(options: DirOptions, cb: DirCallback): void;
+export function dir(cb: DirCallback): void;
+
+export function dirSync(options?: DirOptions): DirResult;
+
+export function tmpName(options: TmpNameOptions, cb: TmpNameCallback): void;
+export function tmpName(cb: TmpNameCallback): void;
+
+export function tmpNameSync(options?: TmpNameOptions): string;
+
+export function setGracefulCleanup(): void;

@@ -1,6 +1,6 @@
 // Type definitions for msgpack-lite 0.1
 // Project: https://github.com/kawanet/msgpack-lite
-// Definitions by: Endel Dreyer <https://github.com/endel/>, Edmund Fokschaner <https://github.com/efokschaner>
+// Definitions by: Endel Dreyer <https://github.com/endel>, Edmund Fokschaner <https://github.com/efokschaner>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 /// <reference types="node" />
@@ -19,7 +19,7 @@ export function decode(input: Buffer | Uint8Array | number[], options?: DecoderO
 /**
  * create a stream that encodes from JS Object to MessagePack
  */
-export function createEncodeStream(options?: EncoderOptions & stream.TransformOptions ): EncodeStream;
+export function createEncodeStream(options?: EncoderOptions & stream.TransformOptions): EncodeStream;
 
 /**
  * create a stream that decodes from MessagePack (Buffer) to JS Object
@@ -37,7 +37,7 @@ export function createCodec(options?: CodecOptions): Codec;
 /**
  * The default built-in codec
  */
-export var codec: {
+export const codec: {
   /**
    * The default built-in codec
    */
@@ -72,30 +72,30 @@ export interface Encoder {
   minBufferSize: number;
   offset: number;
   start: number;
-  write: (chunk: any) => void;
-  fetch: () => void;
-  flush: () => void;
-  push: (chunk: any) => void;
-  pull: () => number;
-  read: () => number;
-  reserve: (length: number) => number;
-  send: (buffer: Buffer) => void;
-  encode: (chunk: any) => void;
-  end: (chunk: any) => void;
+  write(chunk: any): void;
+  fetch(): void;
+  flush(): void;
+  push(chunk: any): void;
+  pull(): number;
+  read(): number;
+  reserve(length: number): number;
+  send(buffer: Buffer): void;
+  encode(chunk: any): void;
+  end(chunk: any): void;
 }
 
 export interface Decoder {
   bufferish: any;
   offset: number;
-  fetch: () => void;
-  flush: () => void;
-  pull: () => number;
-  read: () => number;
-  write: (chunk: any) => void;
-  reserve: (length: number) => number;
-  decode: (chunk: any) => void;
-  push: (chunk: any) => void;
-  end: (chunk: any) => void;
+  fetch(): void;
+  flush(): void;
+  pull(): number;
+  read(): number;
+  write(chunk: any): void;
+  reserve(length: number): number;
+  decode(chunk: any): void;
+  push(chunk: any): void;
+  end(chunk: any): void;
 }
 
 export interface EncodeStream extends stream.Transform {
@@ -125,7 +125,7 @@ export interface CodecOptions {
    * @see https://github.com/kawanet/msgpack-lite#compatibility-mode
    * @default false
    */
-  raw?: boolean;
+  useraw?: boolean;
   /**
    * It decodes msgpack's int64/uint64 formats with int64-buffer object.
    * int64-buffer is a cutom integer type with 64 bits of precision instead
@@ -140,8 +140,14 @@ export interface CodecOptions {
   binarraybuffer?: boolean;
   /**
    * It returns Uint8Array object when encoding, instead of Buffer object.
+   * @default false
    */
   uint8array?: boolean;
+  /**
+   * It uses the global JavaScript Map type, if available, to unpack MessagePack map elements.
+   * @default false
+   */
+  usemap?: boolean;
 }
 
 export interface EncoderOptions {

@@ -1,3 +1,4 @@
+/// <reference types="jquery"/>
 /* inspired by documentation at http://isotope.metafizzy.co/ */
 
 // test all options
@@ -11,7 +12,7 @@ let $grid = $('.grid').isotope({
         rowHeight: 250
     },
     containerStyle: {
-        'display': 'block'
+        display: 'block'
     },
     filter: 'filter',
     fitRows: {
@@ -21,16 +22,16 @@ let $grid = $('.grid').isotope({
     itemSelector: '.grid-item',
     layoutMode: 'cellsByRow',
     getSortData: {
-        'value': '.value',
-        'key': (itemElm: JQuery): string => {
+        value: '.value',
+        key: (itemElm: JQuery): string => {
             return '.key';
         },
-        'description': (itemElm: JQuery): number => {
+        description: (itemElm: JQuery): number => {
             return 1;
         }
     },
     hiddenStyle: {
-        'display': 'none'
+        display: 'none'
     },
     horiz: {
         verticalAligment: 10
@@ -63,25 +64,26 @@ let $grid = $('.grid').isotope({
         horizontalAlignment: 10
     },
     visibleStyle: {
-        'display': 'inline-block'
+        display: 'inline-block'
     }
 });
 
 // test the ones not used in upper test
 $grid = $('.grid').isotope({
-    filter: (): boolean => {
-        return true;
+    filter: (itemElem): boolean => {
+        return itemElem ? true : false;
     },
     sortAscending: {
-        'key': true
+        key: true
     },
     stagger: 'a',
     transitionDuration: 0.4
 });
 
 // test methods using jquery
+$grid.isotope();
 $grid.isotope('addItems', $('.items'));
-$grid.isotope('appended', $('.items')[0])
+$grid.isotope('appended', $('.items')[0]);
 $grid.isotope('hideItemElements', [ new HTMLElement() ]);
 $grid.isotope('insert', new HTMLElement());
 $grid.isotope('prepended', new NodeList());
@@ -98,10 +100,10 @@ $grid.isotope('layout').isotope('reloadItems').isotope('shuffle');
 let iso: Isotope = $grid.data('isotope');
 
 // test native javascript methods
-iso = new Isotope('.grid');
+iso = new Isotope('.grid', {});
 iso.addItems($('.items'));
 iso.appended(new HTMLElement());
-iso.arrange(new HTMLElement());
+iso.arrange({ cellsByColumn: { columnWidth: 101, rowHeight: 12 } });
 iso.destroy();
 elements = iso.getFilteredItemElements();
 elements = iso.getItemElements();

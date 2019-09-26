@@ -1,6 +1,7 @@
 // Type definitions for forever-monitor 1.7
 // Project: https://github.com/nodejitsu/forever-monitor#readme
 // Definitions by: Shun Takahashi <https://github.com/shuntksh>
+//                 Will Boyce <https://github.com/wrboyce>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 /// <reference types="node" />
 
@@ -24,29 +25,28 @@ export interface Options {
     sourceDir?: string;
     watch?: boolean;
     watchIgnoreDotFiles?: boolean;
-    watchIgnorePatters?: string[];
+    watchIgnorePatterns?: string[];
     watchDirectory?: string;
     spawnWith?: SpawnWith;
-    env?: { [envKey: string]: string; };
+    env?: NodeJS.ProcessEnv;
     cwd?: string;
     logFile?: string;
     outFile?: string;
     errFile?: string;
-    parser?: (command: string, args: string[]) => { command: string, args: string[] };
+    parser?(command: string, args: string[]): { command: string, args: string[] };
 }
 
-export function start(script: string, options?: Options): Monitor;
+export function start(script: string | string[], options?: Options): Monitor;
 export function kill(pid: number, killTree?: boolean, signal?: string, callback?: () => any): void;
 export function checkProcess(pid: number): boolean;
 export const version: string;
 
 export class Monitor extends NodeJS.EventEmitter {
-
     /**
      * @param script - Location of the target script to run.
      * @param [options] - Configuration for this instance.
      */
-    constructor(script: string, options?: Options);
+    constructor(script: string | string[], options?: Options);
 
     /**
      * @description Start the process that this instance is configured for

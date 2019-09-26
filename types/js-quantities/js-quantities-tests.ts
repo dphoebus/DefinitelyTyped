@@ -1,4 +1,4 @@
-import Qty from "js-quantities";
+import Qty = require("js-quantities");
 
 declare function describe(desc: string, fn: () => void): void;
 declare function it(desc: string, fn: () => void): void;
@@ -11,7 +11,7 @@ interface Expect<T> {
   toBeCloseTo(this: Expect<number>, x: number, sigFigs: number): void;
   toThrow(this: Expect<() => void>, msg?: string): void;
   toContain<U>(this: Expect<U[]>, x: U): void;
-};
+}
 declare function expect<T>(x: T): Expect<T>;
 declare function beforeEach(f: () => void): void;
 declare function afterEach(f: () => void): void;
@@ -143,7 +143,7 @@ const configurableRoundingFormatter = (maxDecimals: number) => {
     const pow = Math.pow(10, maxDecimals);
     const rounded = Math.round(scalar * pow) / pow;
 
-    return rounded + ' ' + units;
+    return `${rounded} ${units}`;
   };
 };
 
@@ -161,7 +161,7 @@ qty.format(); // same units, current default formatter => '1.12 m'
 
 Qty('37 tempC').to('tempF'); // => 98.6 tempF
 
-const scalar: number = 42;
+const scalar = 42;
 
 Qty('100 tempC').add('10 degC');  // 110 tempC
 Qty('100 tempC').sub('10 degC');  // 90 tempC
@@ -621,8 +621,8 @@ describe("js-quantities", () => {
     });
 
     it("should be cached", () => {
-      const qty = Qty("100 m"),
-        converted = qty.to("ft");
+      const qty = Qty("100 m");
+      const converted = qty.to("ft");
 
       expect(qty.to("ft") === converted).toBe(true);
     });
@@ -1225,7 +1225,7 @@ describe("js-quantities", () => {
           const pow = Math.pow(10, maxDecimals);
           const rounded = Math.round(scalar * pow) / pow;
 
-          return rounded + " " + units;
+          return `${rounded} ${units}`;
         };
       };
 
@@ -1389,9 +1389,9 @@ describe("js-quantities", () => {
 
       describe("array of values", () => {
         it("should be converted", () => {
-          const converter = Qty.swiftConverter("MPa", "bar"),
-            values = [250, 10, 15],
-            expected = [2500, 100, 150];
+          const converter = Qty.swiftConverter("MPa", "bar");
+          const values = [250, 10, 15];
+          const expected = [2500, 100, 150];
 
           expect(converter(values)).toEqual(expected);
         });

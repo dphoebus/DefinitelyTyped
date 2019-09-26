@@ -251,6 +251,16 @@ declare namespace BlissNS {
         (expr: Node, context?: Element): [Node];
     }
 
+    interface AriaRequestEvent extends Event {
+        readonly attributeName: string;
+        attributeValue: string | null;
+    }
+
+    interface CommandEvent extends Event {
+        readonly commandName: string;
+        readonly detail: string | null;
+    }
+
     // Native methods added into "_" property, but methods that return "void" now return thi stype in order to be chainables
     // Methods are All HTMLElement a ELement methods
     interface BlissNativeExtentions<T> {
@@ -275,7 +285,6 @@ declare namespace BlissNS {
         addEventListener(type: "MSGotPointerCapture", listener: (ev: MSPointerEvent) => any, useCapture?: boolean): T;
         addEventListener(type: "MSInertiaStart", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): T;
         addEventListener(type: "MSLostPointerCapture", listener: (ev: MSPointerEvent) => any, useCapture?: boolean): T;
-        addEventListener(type: "MSManipulationStateChanged", listener: (ev: MSManipulationEvent) => any, useCapture?: boolean): T;
         addEventListener(type: "MSPointerCancel", listener: (ev: MSPointerEvent) => any, useCapture?: boolean): T;
         addEventListener(type: "MSPointerDown", listener: (ev: MSPointerEvent) => any, useCapture?: boolean): T;
         addEventListener(type: "MSPointerEnter", listener: (ev: MSPointerEvent) => any, useCapture?: boolean): T;
@@ -545,18 +554,15 @@ declare namespace BlissNS {
         getElementsByTagName(name: "video"): NodeListOf<HTMLVideoElement>;
         getElementsByTagName(name: "view"): NodeListOf<SVGViewElement>;
         getElementsByTagName(name: "wbr"): NodeListOf<HTMLElement>;
-        getElementsByTagName(name: "x-ms-webview"): NodeListOf<MSHTMLWebViewElement>;
         getElementsByTagName(name: "xmp"): NodeListOf<HTMLElement>;
         getElementsByTagName(name: string): NodeListOf<Element>;
         getElementsByTagNameNS(namespaceURI: string, localName: string): NodeListOf<Element>;
         hasAttribute(name: string): boolean;
         hasAttributeNS(namespaceURI: string, localName: string): boolean;
-        msGetRegionContent(): MSRangeCollection;
         msGetUntransformedBounds(): ClientRect;
         msMatchesSelector(selectors: string): boolean;
         msReleasePointerCapture(pointerId: number): T;
         msSetPointerCapture(pointerId: number): T;
-        msZoomTo(args: MsZoomToOptions): T;
         releasePointerCapture(pointerId: number): T;
         removeAttribute(name?: string): T;
         removeAttributeNS(namespaceURI: string, localName: string): T;

@@ -1,7 +1,8 @@
 // Type definitions for pikaday-time 1.4
-// Project: https://github.com/owenmead/Pikaday
+// Project: https://github.com/owenmead/Pikaday, http://dbushell.github.io/pikaday
 // Definitions by: Sayan Pal <https://github.com/Sayan751>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// TypeScript Version: 2.3
 
 import * as moment from 'moment';
 
@@ -18,7 +19,7 @@ declare class Pikaday {
      * Extends the existing configuration options for Pikaday object with the options provided.
      * Can be used to change/extend the configurations on runtime.
      * @param options full/partial configuration options.
-     * @returns {} extended configurations.
+     * @returns extended configurations.
      */
     config(options: Pikaday.PikadayOptions): Pikaday.PikadayOptions;
 
@@ -226,7 +227,7 @@ declare namespace Pikaday {
          * Callback function that gets passed a Date object for each day
          * in view. Should return true to disable selection of that day.
          */
-        disableDayFn?: (date: Date) => boolean;
+        disableDayFn?(date: Date): boolean;
 
         /**
          * Number of years either side (e.g. 10) or array of upper/lower range
@@ -285,22 +286,22 @@ declare namespace Pikaday {
         /**
          * Callback function for when a date is selected.
          */
-        onSelect?: (date: Date) => void;
+        onSelect?(date: Date): void;
 
         /**
          * Callback function for when the picker becomes visible.
          */
-        onOpen?: () => void;
+        onOpen?(): void;
 
         /**
          * Callback function for when the picker is hidden.
          */
-        onClose?: () => void;
+        onClose?(): void;
 
         /**
          * Callback function for when the picker draws a new month.
          */
-        onDraw?: () => void;
+        onDraw?(): void;
 
         /*--pikaday-time specific addition--*/
         /**
